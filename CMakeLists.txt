@@ -26,7 +26,7 @@ option(RYML_BUILD_API "Enable API generation (python, etc)" OFF)
 option(RYML_DBG "Enable (very verbose) debug prints." OFF)
 option(RYML_SYSTEM_C4CORE "Use system-installed c4core instead of the one provided with ryml" OFF)
 
-option(RYML_INSTALL "Enable install target" ON)
+option(RYML_INSTALL "Enable install target" OFF)
 
 
 #-------------------------------------------------------
