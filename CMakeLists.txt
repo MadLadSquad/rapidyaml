@@ -23,7 +23,7 @@ option(RYML_BUILD_TOOLS "Build tools" OFF)
 option(RYML_BUILD_API "Enable API generation (python, etc)" OFF)
 option(RYML_DBG "Enable (very verbose) debug prints." OFF)
 
-option(RYML_INSTALL "Enable install target" ON)
+option(RYML_INSTALL "Enable install target" OFF)
 
 
 #-------------------------------------------------------
