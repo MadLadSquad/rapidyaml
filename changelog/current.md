@@ -1,4 +1,0 @@
-- [PR#607](https://github.com/biojppm/rapidyaml/pull/607) add file utilities:
-  - `file_put_contents()`
-  - `file_get_contents()`
-  - `stdin_get_contents()`
