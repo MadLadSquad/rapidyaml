@@ -63,7 +63,7 @@ if(MSVC)
 endif()
 
 # jsoncpp needs to be compiled. the jsoncpp cmake file sets all these
-# variables; work around this by saving the to restore later.
+# variables; work around this by saving them to restore later.
 macro(variables_save_ varlist)
     foreach(varname ${ARGN})
         set(_saved_value_${varname} "${${varname}}")
