@@ -1,10 +1,8 @@
 # this makefile contains development-related targets
 
 include ./common.mk
-include ./ys.mk
 
-
-check: c4core-check workflows-check doxy
+check: c4core-check workflows-check doxy src
 
 
 c4core-check:
@@ -26,3 +24,13 @@ workflows:
 	$(MAKE) -C ../.github/workflows
 workflows-check:
 	$(MAKE) -C ../.github/workflows test
+
+
+assets:
+	mkdir -p $(ASSETS_DIR)
+src: src-pkg amalg
+src-pkg: assets
+	git-archive-all --prefix $(SRC_NAME) $(ASSETS_DIR)/$(SRC_NAME).src.tgz
+	git-archive-all --prefix $(SRC_NAME) $(ASSETS_DIR)/$(SRC_NAME).src.zip
+amalg amalgamate: assets
+	$(MAKE) -C ../tools amalgamate DST_DIR=$(ASSETS_DIR)

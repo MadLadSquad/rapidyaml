@@ -481,6 +481,9 @@ if __name__ == "__main__":
     args = mkparser().parse_args()
     args.events = [Event(e) for e in args.events] # is there a better way to do this?
     args.type = AmalgamateType(args.type) # is there a better way to do this?
+    if not args.output.endswith(".hpp"):
+        if args.type == AmalgamateType.single_hdr:
+            args.output += ".hpp"
     amalgamate_ryml(filename=args.output,
                     amtype=args.type,
                     with_c4core=args.c4core,
