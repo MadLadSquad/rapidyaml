@@ -17,7 +17,18 @@ namespace yml {
  * @see @ref sample_parse_reuse_tree_and_parser()
  * @see @ref sample_location_tracking()
  */
-
+/** @defgroup doc_parse_in_place__with_existing_parser Parse in place with existing parser
+ * @ingroup doc_parse
+ */
+/** @defgroup doc_parse_in_place___with_temporary_parser Parse in place with temporary parser
+ * @ingroup doc_parse
+ */
+/** @defgroup doc_parse_in_arena__with_existing_parser Parse in arena with existing parser
+ * @ingroup doc_parse
+ */
+/** @defgroup doc_parse_in_arena__with_temporary_parser Parse in arena with temporary parser
+ * @ingroup doc_parse
+ */
 
 
 /** @defgroup doc_node_type Node types
