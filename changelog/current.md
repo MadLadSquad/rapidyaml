@@ -9,7 +9,7 @@ This release is focused on API cleaning and tidying, **in preparation of release
 
 Significant effort went into maintaining backward compatibility. Nevertheless the cleanup introduced a number of deprecations, and some other opt-in but recommended changes: see the migration guide in the next section.
 
-The second major change is the removal of the c4core submodule, vendoring in the c4core source code. Now **cloning with git no longer requires `--recursive`**. Other than that, this change is mostly internal, and all existing workflows to consume rapidyaml and or c4core are kept unchanged (eg `RYML_STANDALONE`, or the newly added `RYML_SYSTEM_C4CORE` still work the same).
+The second major change is **the removal of the c4core submodule**, vendoring in the c4core source code. Now **cloning with git no longer requires `--recursive`**. Other than that, this change is mostly internal, and all existing workflows to consume rapidyaml and or c4core are kept unchanged (eg `RYML_STANDALONE`, or the newly added `RYML_SYSTEM_C4CORE` still work the same).
 
 Finally there are other fixes and improvements. For the details refer to this release's [full changelog](v0.16changelogsection), below the migration guide.
 
@@ -19,7 +19,7 @@ Finally there are other fixes and improvements. For the details refer to this re
 This is the list of migration changes, linking to the relevant section below:
 
  - [Deprecated `.to_val()` method family for tree building](#toval)
- - Deprecated (but define `RYML_WITH_LEGACY_OPERATORS` to avoid the deprecation):
+ - Deprecated operators (but define `RYML_WITH_LEGACY_OPERATORS` to avoid the deprecation):
     - tree building: [deprecate operators `|=` or `=`](#notequal)
     - serialization: [deprecate operators `<<` or `>>`](#notshift)
  - Optional but **recommended**:
@@ -288,6 +288,7 @@ Here's the list of new `ReadResult`-returning methods that may be of use in simi
 <a>v0.16changelogsection</a>
 ## Full changelog
 
+- [PR#643](https://github.com/biojppm/rapidyaml/pull/643) reduce source archive size: move large data files used in benchmarks to  [rapidyaml-data](https://github.com/biojppm/rapidyaml-data) repo.
 - [PR#642](https://github.com/biojppm/rapidyaml/pull/642) amalgamate: add option to create single source+header.
 - [PR#641](https://github.com/biojppm/rapidyaml/pull/641): change uses of `C4_LIKELY()` / `C4_UNLIKELY()` to turn into `[[likely]]` / `[[unlikely]]`. No logic changes.
 - [PR#640](https://github.com/biojppm/rapidyaml/pull/640): add `.deserialize_child()` methods to simplify `read()` implementations

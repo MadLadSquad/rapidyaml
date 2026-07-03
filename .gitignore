@@ -32,6 +32,7 @@ CMakeLists.txt.user*
 *.kdev4
 
 # build files
+assets/
 build/
 install/
 .python-version

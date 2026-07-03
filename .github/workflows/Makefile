@@ -1,4 +1,5 @@
 include ../../proj/common.mk
+all: build
 include ../../proj/ys.mk
 
 SOURCE_FILES := $(wildcard *.ys)
@@ -50,5 +51,7 @@ force:
 
 
 stats:
-	@echo "ys : $$(wc -lm *.ys)"
-	@echo "yml: $$(wc -lm *.yml)"
+	@echo "ys :"
+	@echo "$$(wc -lm *.ys)"
+	@echo "yml:"
+	@echo "$$(wc -lm *.yml)"
