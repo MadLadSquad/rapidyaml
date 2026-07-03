@@ -1,6 +1,6 @@
 # yamlscript utils
 
-YS_VERSION := 0.1.88
+YS_VERSION := 0.2.24
 YS_PREFIX := $(RYML_DIR)/build/ys/$(YS_VERSION)
 YS := $(YS_PREFIX)/bin/ys-$(YS_VERSION)
 export PATH := $(YS_PREFIX)/bin:$(PATH)
@@ -8,7 +8,6 @@ export PATH := $(YS_PREFIX)/bin:$(PATH)
 # Auto install a specific version of ys
 install-ys: $(YS)
 $(YS):
-	mkdir -p $(YS_PREFIX)
 	curl -s https://yamlscript.org/install | \
 	  BIN=1 VERSION=$(YS_VERSION) PREFIX=$(YS_PREFIX) bash
 
