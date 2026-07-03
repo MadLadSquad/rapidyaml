@@ -288,6 +288,7 @@ Here's the list of new `ReadResult`-returning methods that may be of use in simi
 <a>v0.16changelogsection</a>
 ## Full changelog
 
+- [PR#644](https://github.com/biojppm/rapidyaml/pull/644) amalgamate: add `--fastfloat_sys` to use fastfloat from system
 - [PR#643](https://github.com/biojppm/rapidyaml/pull/643) reduce source archive size: move large data files used in benchmarks to  [rapidyaml-data](https://github.com/biojppm/rapidyaml-data) repo.
 - [PR#642](https://github.com/biojppm/rapidyaml/pull/642) amalgamate: add option to create single source+header.
 - [PR#641](https://github.com/biojppm/rapidyaml/pull/641): change uses of `C4_LIKELY()` / `C4_UNLIKELY()` to turn into `[[likely]]` / `[[unlikely]]`. No logic changes.

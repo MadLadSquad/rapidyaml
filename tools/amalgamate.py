@@ -190,6 +190,7 @@ required_includes = """
 def c4core_filelist(with_c4core: bool,
                     with_c4core_dev: bool,
                     with_fastfloat: bool,
+                    with_fastfloat_sys: bool,
                     with_stl: bool):
     hdrfiles = []
     srcfiles = []
@@ -213,8 +214,9 @@ def c4core_filelist(with_c4core: bool,
             "ext/c4core.src/c4/blob.hpp",
             "ext/c4core.src/c4/substr_fwd.hpp",
             "ext/c4core.src/c4/substr.hpp",
-            am.onlyif(with_fastfloat, am.injfile("ext/c4core.src/c4/ext/fast_float_all.h",
-                                                 "c4/ext/fast_float_all.h")),
+            am.onlyif(with_fastfloat and not with_fastfloat_sys,
+                      am.injfile("ext/c4core.src/c4/ext/fast_float_all.h",
+                                 "c4/ext/fast_float_all.h")),
             am.onlyif(with_fastfloat, "ext/c4core.src/c4/ext/fast_float.hpp"),
             "ext/c4core.src/c4/std/vector_fwd.hpp",
             "ext/c4core.src/c4/std/span_fwd.hpp",
@@ -358,6 +360,7 @@ def amalgamate_ryml(filename: str,
                     with_c4core: bool,
                     with_c4core_dev: bool,
                     with_fastfloat: bool,
+                    with_fastfloat_sys: bool,
                     with_stl: bool,
                     events: List[Event],
                     engine_hdr: bool):
@@ -403,6 +406,7 @@ DO NOT EDIT. This file is generated automatically.
     hdr, src = c4core_filelist(with_c4core=with_c4core,
                                with_c4core_dev=with_c4core_dev,
                                with_fastfloat=with_fastfloat,
+                               with_fastfloat_sys=with_fastfloat_sys,
                                with_stl=with_stl)
     hdrfiles += hdr
     srcfiles += src
@@ -455,7 +459,8 @@ def mkparser():
     p = am.mkparser(
         c4core=(True, "amalgamate c4core together with ryml"),
         c4core_dev=(False, "amalgamate c4core (dev utilities) together with ryml"),
-        fastfloat=(True, "enable fastfloat library"),
+        fastfloat=(True, "enable use of fastfloat library"),
+        fastfloat_sys=(False, "use fastfloat from system (do not amalgamate fastfloat)"),
         stl=(True, "enable stl interop"),
         engine_hdr=(False, """place the parse engine definition header
         on the header file when amalgamating as single_src""")
@@ -489,6 +494,7 @@ if __name__ == "__main__":
                     with_c4core=args.c4core,
                     with_c4core_dev=args.c4core_dev,
                     with_fastfloat=args.fastfloat,
+                    with_fastfloat_sys=args.fastfloat_sys,
                     with_stl=args.stl,
                     events=args.events,
                     engine_hdr=args.engine_hdr)
