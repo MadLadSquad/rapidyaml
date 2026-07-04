@@ -90,12 +90,12 @@ static_assert(RYML_LOGBUF_SIZE < RYML_ERRMSG_SIZE, "invalid size");
 #   define RYML_LEGACY_OPERATOR(txt) RYML_DEPRECATED(txt ". To enable this legacy operator, define the symbol RYML_WITH_LEGACY_OPERATORS while compiling")
 #endif
 
-/** @endcond */
-
 #define RYML_CHECK_TYPE_IS_WRAPPER_LIKE_(type)                          \
     static_assert(!std::is_fundamental<type>::value,                    \
                   "did you forget to use '&'? "                         \
                   "This overload is for wrapper types such as c4::fmt::base64()");
+
+/** @endcond */
 
 
 //-----------------------------------------------------------------------------
@@ -441,15 +441,12 @@ public:
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
+/** @cond dev */
+
 C4_SUPPRESS_WARNING_PUSH
 C4_SUPPRESS_WARNING_GCC_CLANG("-Wdeprecated")
 C4_SUPPRESS_WARNING_GCC_CLANG("-Wdeprecated-declarations")
 C4_SUPPRESS_WARNING_MSVC(4996) // deprecated
-
-/** @addtogroup doc_tree
- *
- * @{
- */
 
 /** A tag type to select the key when building the tree, or when
  * (de)serializing with operator<< or operator>> */
@@ -469,10 +466,9 @@ C4_ALWAYS_INLINE Key<K> key(K && k)
     return Key<K>{std::forward<K>(k)};
 }
 
-/** @} */
-
 C4_SUPPRESS_WARNING_POP
 
+/** @endcond */
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

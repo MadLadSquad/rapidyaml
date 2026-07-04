@@ -1,4 +1,4 @@
-!yamlscript/v0
+!ys-0
 
 
 setup-env =::
@@ -13,8 +13,7 @@ setup-env-win =::
     arch: ${{matrix.config.vsenvarch}}
 
 
----
-!yamlscript/v0:
+--- !ys:
 
 :use common: :all
 :workflow-setup 'release'::

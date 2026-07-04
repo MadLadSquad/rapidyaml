@@ -41,7 +41,7 @@
  * Or very quickly, to build and run this sample on your PC, start by
  * creating this `CMakeLists.txt`:
  *
- * ```cmake
+ * @code{cmake}
  * cmake_minimum_required(VERSION 3.13)
  * project(ryml-quickstart LANGUAGES CXX)
  * include(FetchContent)
@@ -56,21 +56,20 @@
  *     COMMAND $<TARGET_FILE:ryml-quickstart>
  *     DEPENDS ryml-quickstart
  *     COMMENT "running: $<TARGET_FILE:ryml-quickstart>")
- * ```
+ * @endcode
  *
  * Now run the following commands in the same folder:
  *
- * ```bash
+ * @code{bash}
  * # configure the project
  * cmake -S . -B build
  * # build and run
  * cmake --build build --target ryml-quickstart -j
  * # optionally, open in your IDE
  * cmake --open build
- * ```
+ * @endcode
  *
- * @{ */
-
+ */
 
 //-----------------------------------------------------------------------------
 
@@ -78,9 +77,20 @@
 //
 // (Each function addresses a topic and is fully self-contained. Jump
 // to the function to find out about its topic.)
+/** @defgroup doc_quickstart_overview Overview
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_lightning_overview();   ///< lightning overview of most common features
 void sample_quick_overview();       ///< quick overview of most common features
+/** @} */
+/** @defgroup doc_quickstart_substr Using csubstr
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_substr();               ///< about ryml's string views (from c4core)
+/** @} */
+/** @defgroup doc_quickstart_parse Parsing
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_parse_file();           ///< ready-to-go example of parsing a file from disk
 void sample_parse_in_place();       ///< parse a mutable YAML source buffer
 void sample_parse_in_arena();       ///< parse a read-only YAML source buffer
@@ -88,11 +98,19 @@ void sample_parse_reuse_tree();     ///< parse into an existing tree, maybe into
 void sample_parse_reuse_parser();   ///< reuse an existing parser
 void sample_parse_reuse_tree_and_parser(); ///< how to reuse existing trees and parsers
 void sample_parse_style();          ///< shows how rapidyaml retains the style of parsed YAML
+/** @} */
+/** @defgroup doc_quickstart_tree Tree
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_iterate_tree();         ///< visit individual nodes and iterate through trees
 void sample_location_tracking();    ///< track node YAML source locations in the parsed tree
 void sample_create_tree();          ///< programatically create trees
 void sample_create_tree_style();    ///< set node styles while creating trees
 void sample_tree_arena();           ///< interact with the tree's serialization arena
+/** @} */
+/** @defgroup doc_quickstart_serialization Serialization
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_fundamental_types();    ///< serialize/deserialize fundamental types
 void sample_empty_null_values();    ///< serialize/deserialize/query empty or null values
 void sample_formatting();           ///< control formatting when serializing/deserializing
@@ -103,35 +121,73 @@ void sample_user_container_types(); ///< serialize/deserialize container (map or
 void sample_std_types();            ///< serialize/deserialize STL containers
 void sample_deserialize_error();    ///< shows error on deserializing nested nodes
 void sample_float_precision();      ///< control precision of serialized floats
+/** @} */
+/** @defgroup doc_quickstart_emit Emitting
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_emit_to_container();    ///< emit to memory, eg a string or vector-like container
 void sample_emit_to_stream();       ///< emit to a stream, eg std::ostream
 void sample_emit_to_file();         ///< emit to a FILE*
 void sample_emit_nested_node();     ///< pick a nested node as the root when emitting
+/** @} */
+/** @defgroup doc_quickstart_json JSON
+ * @ingroup doc_quickstart
+ * @{ */
+void sample_json();                 ///< JSON parsing and emitting
+/** @} */
+/** @defgroup doc_quickstart_style YAML styles
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_style();                ///< query/set node styles
 void sample_style_flow_formatting();///< control formatting of flow containers
 void sample_style_flow_ml_indent(); ///< control indentation of FLOW_ML1 and FLOW_MLN containers
-void sample_json();                 ///< JSON parsing and emitting
+/** @} */
+/** @defgroup doc_quickstart_anchors YAML anchors
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_anchors_and_aliases();  ///< deal with YAML anchors and aliases
 void sample_anchors_and_aliases_create(); ///< how to create YAML anchors and aliases
+/** @} */
+/** @defgroup doc_quickstart_tags YAML tags
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_tags();                 ///< deal with YAML type tags
 void sample_tag_directives();       ///< deal with YAML tag namespace directives
+/** @} */
+/** @defgroup doc_quickstart_docs YAML documents
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_docs();                 ///< deal with YAML docs
+/** @} */
+/** @defgroup doc_quickstart_error Errors and error handlers
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_error_handler();        ///< set custom error handlers
 void sample_error_basic();          ///< handler for basic errors, and obtain a full error message with basic context
 void sample_error_parse();          ///< handler for parse errors, and obtain a full error message with parse context
 void sample_error_visit();          ///< handler for visit errors, and obtain a full error message with visit context
 void sample_error_visit_location(); ///< obtaining the YAML location from a visit error
+/** @} */
+/** @defgroup doc_quickstart_allocators Allocators
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_global_allocator();     ///< set a global allocator for ryml
 void sample_per_tree_allocator();   ///< set per-tree allocators
+/** @} */
+/** @defgroup doc_quickstart_static_trees Static trees
+ * @ingroup doc_quickstart
+ * @{ */
 void sample_static_trees();         ///< how to use static trees in ryml
+/** @} */
 
 
 
 //-----------------------------------------------------------------------------
 
-/** @defgroup doc_sample_helpers Sample helpers
+/** @defgroup doc_quickstart_helpers Sample helpers
  *
- * Helper utilities used in the sample.
+ * Helper utilities used in the quickstart.
+ * @ingroup doc_quickstart
  */
 
 /** @cond dev */
@@ -239,7 +295,7 @@ int main(int argc, const char* argv[])
 //-----------------------------------------------------------------------------
 // first, some helpers used in this quickstart
 
-/** @addtogroup doc_sample_helpers
+/** @addtogroup doc_quickstart_helpers
  *
  * @{ */
 
@@ -269,7 +325,7 @@ bool report_check(int line, const char *predicate, bool result);
 
 
 /** an error handler used by some of the quickstart examples.
- * @ingroup doc_sample_helpers */
+ * @ingroup doc_quickstart_helpers */
 struct ErrorHandlerExample
 {
     ErrorHandlerExample() : original_callbacks(ryml::get_callbacks()) {}
@@ -306,7 +362,7 @@ public:
 
 
 /** Shows how to create a scoped error handler.
- * @ingroup doc_sample_helpers */
+ * @ingroup doc_quickstart_helpers */
 struct ScopedErrorHandlerExample : public ErrorHandlerExample
 {
     ScopedErrorHandlerExample() : ErrorHandlerExample()
@@ -339,7 +395,7 @@ C4_SUPPRESS_WARNING_CLANG("-Wreserved-identifier")
 #endif
 
 
-/** @} */ // doc_sample_helpers
+/** @} */ // doc_quickstart_helpers
 
 
 //-----------------------------------------------------------------------------
@@ -3898,7 +3954,7 @@ void sample_serialize_basic()
 // user scalar types: where nothing in the tree needs to be set.
 // implemented in ryml through to_chars() + from_chars()
 
-/** @addtogroup doc_sample_helpers
+/** @addtogroup doc_quickstart_helpers
  * @{ */
 
 /** @defgroup doc_sample_scalar_types Serialize/deserialize scalar types
@@ -3946,7 +4002,7 @@ template<class T> bool from_chars(ryml::csubstr buf, parse_only_vec4<T> *v) { si
 // https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
 
 /** @} */ // doc_sample_scalar_types
-/** @} */ // doc_sample_helpers
+/** @} */ // doc_quickstart_helpers
 
 
 /** to add scalar types (ie leaf types converting to/from string),
@@ -4028,7 +4084,7 @@ void sample_user_scalar_types()
 // custom types (and also enables rapidyaml to implement serialization
 // of fundamental types).
 
-/** @addtogroup doc_sample_helpers
+/** @addtogroup doc_quickstart_helpers
  * @{ */
 
 /** @defgroup doc_sample_container_types Serialize/deserialize container types
@@ -4259,7 +4315,7 @@ ryml::ReadResult read(ryml::Tree const* tree, ryml::id_type id, my_type *val)
 
 /** @} */ // doc_sample_container_types
 
-/** @} */ // sample_helpers
+/** @} */ // quickstart_helpers
 
 
 /** shows how to serialize/deserialize container types.
@@ -6698,7 +6754,7 @@ void sample_error_visit_location()
 // See also sample_static_trees() for an example on how to use
 // trees with static lifetime.
 
-/** @addtogroup doc_sample_helpers
+/** @addtogroup doc_quickstart_helpers
  * @{ */
 struct GlobalAllocatorExample
 {
@@ -6834,7 +6890,7 @@ void sample_global_allocator()
 
 //-----------------------------------------------------------------------------
 
-/** @addtogroup doc_sample_helpers
+/** @addtogroup doc_quickstart_helpers
  * @{ */
 
 /** an example for a per-tree memory allocator */
@@ -6959,7 +7015,7 @@ void sample_static_trees()
 //-----------------------------------------------------------------------------
 
 
-/** @addtogroup doc_sample_helpers
+/** @addtogroup doc_quickstart_helpers
  * @{ */
 
 namespace /*anon*/ {
@@ -7013,14 +7069,14 @@ int report_checks()
 namespace {
 // LCOV_EXCL_START
 /** dump (part of an) error message to terminal
- * @ingroup doc_sample_helpers */
+ * @ingroup doc_quickstart_helpers */
 void errdump(ryml::csubstr s)
 {
     if(s.len)
         fwrite(s.str, 1, s.len, stderr); // NOLINT
 }
 /** finish printing an error message, and flush
- * @ingroup doc_sample_helpers */
+ * @ingroup doc_quickstart_helpers */
 void errend()
 {
     fputc('\n', stderr); // NOLINT
@@ -7031,7 +7087,7 @@ void errend()
 
 
 /** set up a bare-bones implementation of the callbacks
- * @ingroup doc_sample_helpers */
+ * @ingroup doc_quickstart_helpers */
 ryml::Callbacks default_callbacks()
 {
     return ryml::Callbacks{}
@@ -7073,7 +7129,7 @@ ryml::Callbacks default_callbacks()
 
 /** set up default callbacks when ryml does not provide them
  * (ie when @ref RYML_NO_DEFAULT_CALLBACKS is defined)
- * @ingroup doc_sample_helpers */
+ * @ingroup doc_quickstart_helpers */
 void ensure_callbacks()
 {
 #ifdef RYML_NO_DEFAULT_CALLBACKS
@@ -7093,7 +7149,7 @@ static std::string s_jmp_msg;
 
 /** checking that an assertion occurs while calling fn. assertions are
  * enabled if @ref RYML_USE_ASSERT is defined.
- * @ingroup doc_sample_helpers */
+ * @ingroup doc_quickstart_helpers */
 template<class Fn>
 bool ErrorHandlerExample::check_assertion_occurs(Fn &&fn)
 {
@@ -7105,7 +7161,7 @@ bool ErrorHandlerExample::check_assertion_occurs(Fn &&fn)
     #endif
 }
 /** checking that an error occurs while calling fn
- * @ingroup doc_sample_helpers */
+ * @ingroup doc_quickstart_helpers */
 template<class Fn>
 bool ErrorHandlerExample::check_error_occurs(Fn &&fn)
 {
@@ -7141,7 +7197,7 @@ bool ErrorHandlerExample::check_error_occurs(Fn &&fn)
 
 namespace {
 /** interrupt execution
- * @ingroup doc_sample_helpers */
+ * @ingroup doc_quickstart_helpers */
 [[noreturn]] void stopexec(std::string const& s)
 {
     #ifdef C4_EXCEPTIONS
@@ -7153,7 +7209,7 @@ namespace {
 }
 } // namespace
 /** this is where the callback implementation goes. Remember that it must not return.
- * @ingroup doc_sample_helpers
+ * @ingroup doc_quickstart_helpers
  * */
 [[noreturn]] void ErrorHandlerExample::on_error_basic(ryml::csubstr msg, ryml::ErrorDataBasic const& errdata)
 {
@@ -7168,7 +7224,7 @@ namespace {
     stopexec(saved_msg_short);
 }
 /** this is where the callback implementation goes. Remember that it must not return.
- * @ingroup doc_sample_helpers
+ * @ingroup doc_quickstart_helpers
  * @see ryml::format_location_context
  * */
 [[noreturn]] void ErrorHandlerExample::on_error_parse(ryml::csubstr msg, ryml::ErrorDataParse const& errdata)
@@ -7191,7 +7247,7 @@ namespace {
     stopexec(saved_msg_full);
 }
 /** this is where the callback implementation goes. Remember that it must not return.
- * @ingroup doc_sample_helpers
+ * @ingroup doc_quickstart_helpers
  * */
 [[noreturn]] void ErrorHandlerExample::on_error_visit(ryml::csubstr msg, ryml::ErrorDataVisit const& errdata)
 {
@@ -7232,7 +7288,7 @@ namespace {
 
 
 /** a helper to create the Callbacks object for the custom error handler
- * @ingroup doc_sample_helpers
+ * @ingroup doc_quickstart_helpers
  * */
 ryml::Callbacks ErrorHandlerExample::callbacks()
 {
@@ -7266,8 +7322,7 @@ void ErrorHandlerExample::check_disabled() const
 }
 
 
-/** @} */ // doc_sample_helpers
+/** @} */ // doc_quickstart_helpers
 
-/** @} */ // doc_quickstart
 
 C4_SUPPRESS_WARNING_GCC_CLANG_POP
