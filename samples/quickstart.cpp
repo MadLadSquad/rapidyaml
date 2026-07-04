@@ -7165,6 +7165,7 @@ bool ErrorHandlerExample::check_assertion_occurs(Fn &&fn)
 template<class Fn>
 bool ErrorHandlerExample::check_error_occurs(Fn &&fn)
 {
+    RYML_SAVE_TEST_EXPFAIL_(); // a dev helper to dump all tests
     saved_msg_short.clear();
     saved_msg_full.clear();
     saved_msg_full_with_context.clear();

@@ -6,6 +6,7 @@
 #include "c4/span.hpp"
 #include "c4/yml/std/std.hpp"
 #include "c4/yml/detail/print.hpp"
+#include "c4/yml/detail/dbgprint.hpp"
 #include "c4/yml/detail/checks.hpp"
 #endif
 
@@ -456,6 +457,7 @@ void ExpectError::check_assert_visit(Tree const* tree, fntestref fn, id_type exp
 
 void ExpectError::check_error_basic(Tree *tree, fntestref fn, bool only_basic)
 {
+    RYML_SAVE_TEST_EXPFAIL_();
     auto context = ExpectError(ExpectedErrorType::err_basic, tree);
     C4_IF_EXCEPTIONS_(try, if(setjmp(s_jmp_env_expect_error) == 0))
     {
@@ -491,6 +493,7 @@ void ExpectError::check_error_basic(Tree *tree, fntestref fn, bool only_basic)
 
 void ExpectError::check_error_parse(Tree *tree, fntestref fn, Location const& expected_location)
 {
+    RYML_SAVE_TEST_EXPFAIL_();
     ExpectError context(ExpectedErrorType::err_parse, tree, expected_location);
     C4_IF_EXCEPTIONS_(try, if(setjmp(s_jmp_env_expect_error) == 0))
     {
@@ -545,6 +548,7 @@ void ExpectError::check_error_parse(Tree *tree, fntestref fn, Location const& ex
 
 void ExpectError::check_error_visit(Tree *tree, fntestref fn, id_type id)
 {
+    RYML_SAVE_TEST_EXPFAIL_();
     auto context = ExpectError(ExpectedErrorType::err_visit, tree);
     C4_IF_EXCEPTIONS_(try, if(setjmp(s_jmp_env_expect_error) == 0))
     {

@@ -19,6 +19,7 @@ namespace c4 {
 namespace yml {
 
 static char savedir[] = "./yamldump";
+static bool next_test_expects_failure_ = false;
 
 struct savehelper
 {
@@ -29,6 +30,7 @@ struct savehelper
     void reset_from_no_test(csubstr filename)
     {
         char buf[1024];
+        // get the executable name
         ssize_t ret = readlink("/proc/self/exe", buf, sizeof(buf)-1);
         RYML_CHECK_BASIC_(ret > 0);
         RYML_CHECK_BASIC_(ret < (int)sizeof(buf));
@@ -75,7 +77,13 @@ struct savehelper
     void prepare_fullname()
     {
         printf("new test! %.*s[%zu]\n", (int)basename.size(), basename.data(), basename.size());
-        c4::formatrs(&fullname, "{}/{}--", savedir, basename);
+        c4::csubstr expfail = "";
+        if(next_test_expects_failure_)
+        {
+            next_test_expects_failure_ = false;
+            expfail = "expectsfail--";
+        }
+        c4::formatrs(&fullname, "{}/{}--{}", savedir, basename, expfail);
         indexpos = fullname.size();
         fullname.resize(fullname.size() + 32);
         sources.clear();
@@ -117,6 +125,10 @@ static void save_impl(csubstr filename, csubstr extension, csubstr src)
     file_put_contents(src, savename.str);
 }
 
+void ryml_save_test_expfail()
+{
+    next_test_expects_failure_ = true;
+}
 void ryml_save_test_yaml(csubstr filename, csubstr src)
 {
     save_impl(filename, ".yaml", src);

@@ -48,21 +48,6 @@
 #define RYML_WITH_OR_WITHOUT_TAB_TOKENS_(with, without) without
 #endif
 
-// helper to export cases to the YAML test suite
-#ifndef RYML_SAVE_TEST_YAML
-#define RYML_SAVE_TEST_YAML_(filename, src)
-#define RYML_SAVE_TEST_JSON_(filename, src)
-#else
-#define RYML_SAVE_TEST_YAML_(filename, src) c4::yml::ryml_save_test_yaml(filename, src)
-#define RYML_SAVE_TEST_JSON_(filename, src) c4::yml::ryml_save_test_json(filename, src)
-namespace c4 {
-namespace yml {
-void ryml_save_test_yaml(csubstr filename, csubstr src);
-void ryml_save_test_json(csubstr filename, csubstr src);
-} // namespace yml
-} // namespace c4
-#endif
-
 
 // scaffold:
 #define _c4dbgnextline()                           \

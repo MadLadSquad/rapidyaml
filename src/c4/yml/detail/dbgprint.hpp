@@ -231,4 +231,25 @@ C4_SUPPRESS_WARNING_GCC_POP
 
 #endif // RYML_DBG
 
+
+
+// helper to export cases to the YAML test suite
+#ifndef RYML_SAVE_TEST_YAML
+#define RYML_SAVE_TEST_YAML_(filename, src)
+#define RYML_SAVE_TEST_JSON_(filename, src)
+#define RYML_SAVE_TEST_EXPFAIL_()
+#else
+#define RYML_SAVE_TEST_YAML_(filename, src) c4::yml::ryml_save_test_yaml(filename, src)
+#define RYML_SAVE_TEST_JSON_(filename, src) c4::yml::ryml_save_test_json(filename, src)
+#define RYML_SAVE_TEST_EXPFAIL_() c4::yml::ryml_save_test_expfail()
+namespace c4 {
+namespace yml {
+void ryml_save_test_yaml(csubstr filename, csubstr src);
+void ryml_save_test_json(csubstr filename, csubstr src);
+void ryml_save_test_expfail();
+} // namespace yml
+} // namespace c4
+#endif // RYML_SAVE_TEST_YAML
+
+
 #endif /* C4_YML_DETAIL_DBGPRINT_HPP_ */
