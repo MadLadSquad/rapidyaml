@@ -407,6 +407,7 @@ struct bomspec
 {
     csubstr name;
     Encoding_e encoding;
+    bool supported;
     csubstr bom;
 };
 extern const cspan<bomspec> bomspecs;

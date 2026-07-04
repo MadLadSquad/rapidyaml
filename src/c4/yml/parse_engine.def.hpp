@@ -4816,37 +4816,25 @@ bool ParseEngine<EventHandler>::_handle_bom()
         const csubstr rest = rem.sub(1);
         // https://yaml.org/spec/1.2.2/#52-character-encodings
         #define _rymlisascii(c) ((c) > '\0' && (c) <= '\x7f') // is the character ASCII?
-        if(rem.begins_with(csubstr{"\x00\x00\xfe\xff", 4}) || (rem.begins_with(csubstr{"\x00\x00\x00", 3}) && rem.len >= 4u && _rymlisascii(rem.str[3])))
+        if(rem.begins_with(csubstr{"\x00\x00\xfe\xff", 4})
+           // no bom:
+           || (rem.begins_with(csubstr{"\x00\x00\x00", 3}) && rem.len >= 4u && _rymlisascii(rem.str[3])))
         {
-            _c4dbgp("byte order mark: UTF32BE");
-            _handle_bom(UTF32BE);
-            _line_progressed(4);
-            m_bom_len = 4;
-            return true;
+            _c4err("UTF32BE not supported");
         }
-        else if(rem.begins_with(csubstr{"\xff\xfe\x00\x00", 4}) || (rest.begins_with(csubstr{"\x00\x00\x00", 3}) && rem.len >= 4u && _rymlisascii(rem.str[0])))
+        else if(rem.begins_with(csubstr{"\xff\xfe\x00\x00", 4})
+                // no bom:
+                || (rest.begins_with(csubstr{"\x00\x00\x00", 3}) && rem.len >= 4u && _rymlisascii(rem.str[0])))
         {
-            _c4dbgp("byte order mark: UTF32LE");
-            _handle_bom(UTF32LE);
-            _line_progressed(4);
-            m_bom_len = 4;
-            return true;
+            _c4err("UTF32LE not supported");
         }
         else if(rem.begins_with("\xfe\xff") || (rem.begins_with('\x00') && rem.len >= 2u && _rymlisascii(rem.str[1])))
         {
-            _c4dbgp("byte order mark: UTF16BE");
-            _handle_bom(UTF16BE);
-            _line_progressed(2);
-            m_bom_len = 2;
-            return true;
+            _c4err("UTF16BE not supported");
         }
         else if(rem.begins_with("\xff\xfe") || (rest.begins_with('\x00') && rem.len >= 2u && _rymlisascii(rem.str[0])))
         {
-            _c4dbgp("byte order mark: UTF16LE");
-            _handle_bom(UTF16LE);
-            _line_progressed(2);
-            m_bom_len = 2;
-            return true;
+            _c4err("UTF16LE not supported");
         }
         else if(rem.begins_with("\xef\xbb\xbf"))
         {
@@ -4869,11 +4857,11 @@ void ParseEngine<EventHandler>::_handle_bom(Encoding_e enc)
         if(enc == UTF8 || /*beginning of file*/(m_evt_handler->m_curr->line_contents.rem.str == _buf().str))
             m_encoding = enc;
         else
-            _c4err("non-UTF8 byte order mark can appear only at the beginning of the file");
+            _c4err("non-UTF8 byte order mark can appear only at the beginning of the file"); // LCOV_EXCL_LINE
     }
     else if(enc != m_encoding)
     {
-        _c4err("byte order mark can only be set once");
+        _c4err("byte order mark can only be set once"); // LCOV_EXCL_LINE
     }
 }
 

@@ -521,25 +521,14 @@ ryml deliberately makes no effort to follow the YAML standard in the
 following situations:
 
 * ryml's parser engine correctly handles all YAML features. But the 
-  destination tree does NOT accept containers as map keys: map keys
-  must always be scalars. But note that this is a limitation
-  only of the final tree.
+  destination tree does not accept containers as map keys: map keys
+  must always be scalars. However, note that this is a limitation
+  only of the final tree, and not of the parser.
 * Tab characters after `:` and `-` are not accepted tokens, unless
   ryml is compiled with the macro `RYML_WITH_TAB_TOKENS`. This
   requirement exists because checking for tabs introduces branching
   into the parser's hot code and in some cases costs as much as 10%
   in parsing time.
-* Non-unique map keys are allowed. Enforcing key uniqueness in the
-  parser or in the tree would cause log-linear parsing complexity (for
-  root children on a mostly flat tree), and would increase code size
-  through added structural, logical and cyclomatic
-  complexity. Enforcing uniqueness in the parser would hurt users who
-  may not care about it (they may not care either because
-  non-uniqueness is OK for their use case, or because it is impossible
-  to occur). On the other hand, any user who requires uniqueness can
-  easily enforce it by doing a post-parse walk through the tree. So
-  choosing to not enforce key uniqueness adheres to the spirit of
-  "don't pay for what you don't use".
 * `%YAML` directives have no effect and are ignored.
 * `%TAG` directives are limited to a default maximum of 4 instances
   per `Tree`. To increase this maximum, define the preprocessor symbol
@@ -552,6 +541,18 @@ following situations:
   scalars are ignored. The [standard mandates that they should be
   quoted](https://yaml.org/spec/1.2.2/#52-character-encodings) when
   emitted; this is not done.
+* UTF16 and UTF32 encoded files are not supported.
+* Non-unique map keys are allowed. Enforcing key uniqueness in the
+  parser or in the tree would cause log-linear parsing complexity (for
+  root children on a mostly flat tree), and would increase code size
+  through added structural, logical and cyclomatic
+  complexity. Enforcing uniqueness in the parser would hurt users who
+  may not care about it (they may not care either because
+  non-uniqueness is OK for their use case, or because it is impossible
+  to occur). On the other hand, any user who requires uniqueness can
+  easily enforce it by doing a post-parse walk through the tree. So
+  choosing to not enforce key uniqueness adheres to the spirit of
+  "don't pay for what you don't use".
 
 If you do run into trouble and would like to investigate conformance
 of your YAML code, **beware** of existing online YAML linters, many of
