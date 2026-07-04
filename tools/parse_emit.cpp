@@ -70,9 +70,9 @@ Options:
 
   -h,--help              print this message
   -e [N],--reserve [N]   reserve before parsing (default: N=%d):
-                         0=do not reserve
-                         1=reserve by estimating size
-                         all other values=reserve with value
+                           0=do not reserve
+                           1=reserve by estimating size
+                           all other values=reserve with value
   -i,--ints              use the ints parser, and print the int events (default: %s)
   -rt,--resolve-tags     resolve tags (default: %s)
   -rr,--resolve-refs     resolve references (default: %s)
@@ -91,7 +91,7 @@ Options:
             to_csubstr(exename).basename().str,
             (int)defs.reserve_size,
             defs.ints_parser ? "ints parser" : "tree parser",
-            defs.resolve_tags ? "resolve tags" : "do not resolve refs",
+            defs.resolve_tags ? "resolve tags" : "do not resolve tags",
             defs.resolve_refs ? "resolve refs" : "do not resolve refs",
             defs.resolve_tags && defs.resolve_refs ? "yes" : "no",
             defs.keep_refs ? "keep refs" : "remove refs",
@@ -168,13 +168,14 @@ bool parse_args(int argc, const char *argv[], Args &args)
     }
     timing_enabled = args.timed_sections;
     args.filename = to_csubstr(argv[argc - 1]);
+    if(args.filename == "-") args.filename = "stdin";
     return true;
 }
 
 void read_file(csubstr filename, std::vector<char> *buf)
 {
     buf->clear();
-    if(filename == "-" || filename == "stdin") // read from stdin
+    if(filename == "stdin") // read from stdin
     {
         stdin_get_contents(buf); // LCOV_EXCL_LINE --- lcov fail!
     }
@@ -197,6 +198,7 @@ void dump2stderr(csubstr s)
 
 void throwerr(csubstr msg)
 {
+    fflush(NULL);
     C4_IF_EXCEPTIONS(
         throw std::runtime_error({msg.str, msg.len});
         ,

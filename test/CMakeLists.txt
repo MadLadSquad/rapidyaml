@@ -254,6 +254,7 @@ if(RYML_DEFAULT_CALLBACKS AND NOT WIN32) # windows does like the abort call
         set(tgt ryml-test-error-${name})
         set(src test_error_${name}.cpp)
         add_executable(${tgt} ${src} test_error_dump_gcov_on_error.hpp)
+        ryml_maybe_dump_test_yaml(${tgt})
         add_dependencies(ryml-test-build ${tgt})
         set_target_properties(${tgt} PROPERTIES FOLDER test)
         target_link_libraries(${tgt} PRIVATE ryml)

@@ -6,6 +6,7 @@
 #include "c4/span.hpp"
 #include "c4/yml/std/std.hpp"
 #include "c4/yml/detail/print.hpp"
+#include "c4/yml/detail/dbgprint.hpp"
 #include "c4/yml/detail/checks.hpp"
 #endif
 
@@ -39,24 +40,24 @@ namespace yml {
 
 const bomspec bomspecs_[] = {
     //                        bare string causes problems in gcc5 and earlier
-    {"NOBOM"       , UTF8   , csubstr("", size_t(0))},
-    {"UTF8"        , UTF8   , csubstr("\xef\xbb\xbf", 3)},
-    {"UTF16BE"     , UTF16BE, csubstr("\xfe\xff", 2)},
-    {"!UTF16BE-a"  , UTF16BE, csubstr("\x00""a", 2)},
-    {"!UTF16BE-b"  , UTF16BE, csubstr("\x00""b", 2)},
-    {"!UTF16BE-0"  , UTF16BE, csubstr("\x00""0", 2)},
-    {"UTF16LE"     , UTF16LE, csubstr("\xff\xfe", 2)},
-    {"!UTF16LE-a"  , UTF16LE, csubstr("a""\x00" , 2)},
-    {"!UTF16LE-b"  , UTF16LE, csubstr("b""\x00" , 2)},
-    {"!UTF16LE-0"  , UTF16LE, csubstr("0""\x00" , 2)},
-    {"UTF32BE"     , UTF32BE, csubstr("\x00\x00\xfe\xff", 4)},
-    {"!UTF32BE-a"  , UTF32BE, csubstr("\x00\x00\x00""a" , 4)},
-    {"!UTF32BE-b"  , UTF32BE, csubstr("\x00\x00\x00""b" , 4)},
-    {"!UTF32BE-0"  , UTF32BE, csubstr("\x00\x00\x00""0" , 4)},
-    {"UTF32LE"     , UTF32LE, csubstr("\xff\xfe\x00\x00", 4)},
-    {"!UTF32LE-a"  , UTF32LE, csubstr("a""\x00\x00\x00" , 4)},
-    {"!UTF32LE-b"  , UTF32LE, csubstr("b""\x00\x00\x00" , 4)},
-    {"!UTF32LE-0"  , UTF32LE, csubstr("0""\x00\x00\x00" , 4)},
+    {"NOBOM"       , UTF8   , true , csubstr("", size_t(0))},
+    {"UTF8"        , UTF8   , true , csubstr("\xef\xbb\xbf", 3)},
+    {"UTF16BE"     , UTF16BE, false, csubstr("\xfe\xff", 2)},
+    {"!UTF16BE-a"  , UTF16BE, false, csubstr("\x00""a", 2)},
+    {"!UTF16BE-b"  , UTF16BE, false, csubstr("\x00""b", 2)},
+    {"!UTF16BE-0"  , UTF16BE, false, csubstr("\x00""0", 2)},
+    {"UTF16LE"     , UTF16LE, false, csubstr("\xff\xfe", 2)},
+    {"!UTF16LE-a"  , UTF16LE, false, csubstr("a""\x00" , 2)},
+    {"!UTF16LE-b"  , UTF16LE, false, csubstr("b""\x00" , 2)},
+    {"!UTF16LE-0"  , UTF16LE, false, csubstr("0""\x00" , 2)},
+    {"UTF32BE"     , UTF32BE, false, csubstr("\x00\x00\xfe\xff", 4)},
+    {"!UTF32BE-a"  , UTF32BE, false, csubstr("\x00\x00\x00""a" , 4)},
+    {"!UTF32BE-b"  , UTF32BE, false, csubstr("\x00\x00\x00""b" , 4)},
+    {"!UTF32BE-0"  , UTF32BE, false, csubstr("\x00\x00\x00""0" , 4)},
+    {"UTF32LE"     , UTF32LE, false, csubstr("\xff\xfe\x00\x00", 4)},
+    {"!UTF32LE-a"  , UTF32LE, false, csubstr("a""\x00\x00\x00" , 4)},
+    {"!UTF32LE-b"  , UTF32LE, false, csubstr("b""\x00\x00\x00" , 4)},
+    {"!UTF32LE-0"  , UTF32LE, false, csubstr("0""\x00\x00\x00" , 4)},
 };
 const cspan<bomspec> bomspecs = bomspecs_;
 
@@ -456,6 +457,7 @@ void ExpectError::check_assert_visit(Tree const* tree, fntestref fn, id_type exp
 
 void ExpectError::check_error_basic(Tree *tree, fntestref fn, bool only_basic)
 {
+    RYML_SAVE_TEST_EXPFAIL_();
     auto context = ExpectError(ExpectedErrorType::err_basic, tree);
     C4_IF_EXCEPTIONS_(try, if(setjmp(s_jmp_env_expect_error) == 0))
     {
@@ -491,6 +493,7 @@ void ExpectError::check_error_basic(Tree *tree, fntestref fn, bool only_basic)
 
 void ExpectError::check_error_parse(Tree *tree, fntestref fn, Location const& expected_location)
 {
+    RYML_SAVE_TEST_EXPFAIL_();
     ExpectError context(ExpectedErrorType::err_parse, tree, expected_location);
     C4_IF_EXCEPTIONS_(try, if(setjmp(s_jmp_env_expect_error) == 0))
     {
@@ -545,6 +548,7 @@ void ExpectError::check_error_parse(Tree *tree, fntestref fn, Location const& ex
 
 void ExpectError::check_error_visit(Tree *tree, fntestref fn, id_type id)
 {
+    RYML_SAVE_TEST_EXPFAIL_();
     auto context = ExpectError(ExpectedErrorType::err_visit, tree);
     C4_IF_EXCEPTIONS_(try, if(setjmp(s_jmp_env_expect_error) == 0))
     {

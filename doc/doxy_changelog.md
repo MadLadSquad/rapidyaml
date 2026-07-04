@@ -302,6 +302,7 @@ Here's the list of new `ReadResult`-returning methods that may be of use in simi
 <a>v0.16changelogsection</a>
 ### Full changelog
 
+- [PR#646](https://github.com/biojppm/rapidyaml/pull/646) remove support for UTF16 and UTF32 encoded files
 - [PR#645](https://github.com/biojppm/rapidyaml/pull/645) tools: unify ryml-parse-emit and ryml-yaml-events, remove ryml-yaml-events
 - [PR#644](https://github.com/biojppm/rapidyaml/pull/644) amalgamate: add `--fastfloat_sys` to use fastfloat from system
 - [PR#643](https://github.com/biojppm/rapidyaml/pull/643) reduce source archive size: move large data files used in benchmarks to  [rapidyaml-data](https://github.com/biojppm/rapidyaml-data) repo.

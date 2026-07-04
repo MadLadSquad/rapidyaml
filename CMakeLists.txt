@@ -228,10 +228,10 @@ add_custom_target(ryml-uninstall
 # developer targets
 
 
-option(RYML_SAVE_TEST_YAML "Save all the parsed yaml while testing" OFF)
+option(RYML_SAVE_TEST_YAML "(dev) save all the parsed yaml while testing" OFF)
 if(RYML_SAVE_TEST_YAML)
     target_compile_definitions(ryml PUBLIC RYML_SAVE_TEST_YAML)
-    set(RYML_TEST_FUZZ OFF CACHE BOOL "" FORCE)
+    set(RYML_FUZZ_TEST  OFF CACHE BOOL "" FORCE)
     set(RYML_TEST_SUITE OFF CACHE BOOL "" FORCE)
 endif()
 function(ryml_maybe_dump_test_yaml target)
