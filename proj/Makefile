@@ -2,6 +2,9 @@
 
 include ./common.mk
 
+describe:
+	@echo $(RYML_ID)
+
 check: c4core-check workflows-check doxy src
 
 

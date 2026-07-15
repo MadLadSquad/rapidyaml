@@ -1,7 +1,7 @@
 SHELL := bash
 
 RYML_DIR := $(shell cd $(dir $(lastword $(MAKEFILE_LIST)))/.. ; pwd)
-RYML_ID ?= $(shell git describe --tags || git rev-parse --short HEAD)
+RYML_ID ?= $(shell $(GIT) describe --tags || $(GIT) rev-parse --short HEAD)
 SRC_SUFFIX ?= .$(RYML_ID)
 SRC_NAME ?= rapidyaml$(SRC_SUFFIX)
 ASSETS_DIR := $(RYML_DIR)/assets
