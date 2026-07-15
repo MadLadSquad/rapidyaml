@@ -37,7 +37,9 @@ help:
 	@echo "overwrite doxygen files"
 	mkdir -p "$(BUILDDIR)"
 	if [ -d "$(BUILDDIR)/html/doxygen" ] ; then rm -rf "$(BUILDDIR)/html/doxygen" ; fi
-	cp -favr doxygen/html "$(BUILDDIR)/html/doxygen"
+	cp -far doxygen/html "$(BUILDDIR)/html/doxygen"
+	@echo "sphinx:"
+	@echo "    `pwd`/$(BUILDDIR)/html/index.html"
 
 
 doxy: doxy_install c4core-clone

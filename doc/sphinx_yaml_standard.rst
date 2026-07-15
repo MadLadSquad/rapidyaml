@@ -52,8 +52,8 @@ following situations:
 -  UTF16 and UTF32 encoded files are not supported.
 -  Byte Order Marks: while ryml correctly handles BOMs at the beginning
    of the stream or documents (as per the standard), BOMs inside
-   scalars are ignored. The [standard mandates that they should be
-   quoted](https://yaml.org/spec/1.2.2/#52-character-encodings) when
+   scalars are ignored. The `standard mandates that they should be
+   quoted <https://yaml.org/spec/1.2.2/#52-character-encodings>` when
    emitted; this is not done.
 -  Non-unique map keys are allowed. Enforcing key uniqueness in the
    parser or in the tree would cause log-linear parsing complexity (for

@@ -25,7 +25,7 @@ namespace yml {
 /** @addtogroup doc_parse
  * @{ */
 
-/** @defgroup doc_event_handlers Event Handlers
+/** @addtogroup doc_event_handlers Event Handlers
  *
  * @brief rapidyaml implements its parsing logic with a two-level
  * model, where a @ref ParseEngine object reads through the YAML
@@ -108,8 +108,8 @@ namespace yml {
  * cases. They are called by the parser when a just-handled
  * value/container is actually the first key of a new map:
  *
- *   - `actually_val_is_first_key_of_new_map_flow()` (@ref EventHandlerTree::actually_val_is_first_key_of_new_map_flow() "see implementation in EventHandlerTree" / @ref EventHandlerInts::actually_val_is_first_key_of_new_map_flow() "see implementation in EventHandlerInts")
- *   - `actually_val_is_first_key_of_new_map_block()` (@ref EventHandlerTree::actually_val_is_first_key_of_new_map_block() "see implementation in EventHandlerTree" / @ref EventHandlerInts::actually_val_is_first_key_of_new_map_block() "see implementation in EventHandlerInts")
+ *   - `actually_val_is_first_key_of_new_map_flow()` (@ref EventHandlerTree::actually_val_is_first_key_of_new_map_flow() "see implementation in EventHandlerTree" / @ref extra::EventHandlerInts::actually_val_is_first_key_of_new_map_flow() "see implementation in EventHandlerInts")
+ *   - `actually_val_is_first_key_of_new_map_block()` (@ref EventHandlerTree::actually_val_is_first_key_of_new_map_block() "see implementation in EventHandlerTree" / @ref extra::EventHandlerInts::actually_val_is_first_key_of_new_map_block() "see implementation in EventHandlerInts")
  *
  * For example, consider an implicit map inside a seq: `[a: b, c:
  * d]` which is parsed as `[{a: b}, {c: d}]`. The standard event
@@ -203,6 +203,8 @@ namespace yml {
  * handler.end_seq();
  * handler.end_map();
  * ```
+ * @{
+ * @}
  */
 
 
@@ -218,7 +220,8 @@ namespace yml {
  * is approximate. The result may be actually smaller than the
  * resulting number of nodes, notably if the YAML uses implicit
  * maps as flow seq members as in `[these: are, individual:
- * maps]`. */
+ * maps]`.
+ */
 RYML_EXPORT id_type estimate_tree_capacity(csubstr src); // NOLINT(readability-redundant-declaration)
 
 
@@ -271,13 +274,13 @@ struct Annotation
  * There are two implemented handlers (see @ref doc_event_handlers,
  * which has important notes about the event model):
  *
- * - @ref EventHandlerTree is the handler responsible for creating the
- *   ryml @ref Tree
+ * - @ref EventHandlerTree (see @ref doc_event_handlers_tree) is the
+ *   handler responsible for creating the ryml @ref Tree
  *
- * - @ref extra::EventHandlerInts is the handler responsible for
- *   emitting integer-coded events. It is intended for implementing
- *   fully-conformant parsing in other programming languages
- *   (integration is currently under work for
+ * - @ref extra::EventHandlerInts (see @ref doc_event_handlers_ints)
+ *   is the handler responsible for emitting integer-coded events. It
+ *   is intended for implementing fully-conformant parsing in other
+ *   programming languages (integration is currently under work for
  *   [YamlScript](https://github.com/yaml/yamlscript) and
  *   [go-yaml](https://github.com/yaml/go-yaml/)). It is not part of
  *   the library and is not installed.

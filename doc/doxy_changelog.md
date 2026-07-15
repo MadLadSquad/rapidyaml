@@ -11,21 +11,19 @@ Changes since latest release: [current.md](https://github.com/biojppm/rapidyaml/
 ## 0.16.0
 
 [Github release: 0.16.2](https://github.com/biojppm/rapidyaml/releases/tag/v0.16.0)
-
 ### TL;DR
+This release focuses on API cleaning and tidying, **in preparation of release 1.0**:
 
-This release is focused on API cleaning and tidying, **in preparation of release 1.0**:
-
-  - adds serialization to/from `Tree` (not just `NodeRef`/`ConstNodeRef`)
   - improves tracking of nodes causing deserialization errors
+  - adds serialization to/from `Tree` (not just `NodeRef`/`ConstNodeRef`)
   - deprecates a good number of functions, mostly around serialization and tree/node building
   - **brings code coverage to 100%** (rounded from >99.5%)
+  - remove the c4core submodule, vendoring-in just the required c4core source code.
 
-Significant effort went into maintaining backward compatibility. Nevertheless the cleanup introduced a number of deprecations, and some other opt-in but recommended changes: see the migration guide in the next section.
+Significant effort went into maintaining backward compatibility. Nevertheless the API cleanup introduces a number of deprecations, and some other opt-in but recommended changes: see the migration guide in the next section.
 
-The second major change is **the removal of the c4core submodule**, vendoring in the c4core source code. Now **cloning with git no longer requires `--recursive`**. Other than that, this change is mostly internal, and all existing workflows to consume rapidyaml and or c4core are kept unchanged (eg `RYML_STANDALONE`, or the newly added `RYML_SYSTEM_C4CORE` still work the same).
+Finally there are other fixes and improvements. For the details refer to this release's [full changelog](#v016changelogsection), below the migration guide.
 
-Finally there are other fixes and improvements. For the details refer to this release's [full changelog](v0.16changelogsection), below the migration guide.
 
 
 ### Migration guide
@@ -55,9 +53,9 @@ For tree building, methods `.to_*()` were deprecated in favour of the newly-adde
 
 
 <a id="notequal"></a>
-#### Do not use operators |= or =
+#### Deprecate operators |= and =
 
-For tree building, methods `operator|=` and `operator=` were deprecated in favour of the newly-added `.set_*()` methods:
+For tree building, `operator|=` and `operator=` were deprecated in favour of the newly-added `.set_*()` methods:
 
 @code{c++}
 c4::yml::Tree tree = ...;
@@ -101,9 +99,9 @@ If you prefer to keep on using the legacy operators `=`, `|=`, `<<`, `>>`, you c
 
 
 <a id="notshift"></a>
-#### Do not use operators << or >>
+#### Do not use operators << and >>
 
-For serialization, `operator<<` and `operator>>` were deprecated in favour of `.set_serialized()` and `.deserialize()` (which introduce return on error) or  `.save()` and `.load()` (which trigger error callback on error):
+For serialization, `operator<<` and `operator>>` were deprecated in favour of `.set_serialized()` and `.deserialize()` (which introduce return on error) or `.save()` and `.load()` (which trigger error callback on error):
 @code{c++}
 c4::yml::Tree tree = ...;
 c4::yml::id_type node_id = ...;
@@ -145,7 +143,7 @@ if( ! tree.deserialize_key(node_id, &var2))
 
 If you prefer to keep on using the legacy operators `=`, `|=`, `<<`, `>>`, you can enable the cmake variable (or define the macro) `RYML_WITH_LEGACY_OPERATORS`.
 
-The rest of the changes are optional, **but advised, and recommended**. If you don't do these changes, your code will go on working as before, but the new features and improved behavior will not be available.
+The rest of the changes are **optional, but recommended**. If you don't do these changes, your code will go on working as before, but the new features and improved behavior will not be available.
 
 
 <a id="readresult"></a>
@@ -166,13 +164,15 @@ c4::yml::ReadResult read(c4::yml::ConstNodeRef const& node, T *var)
     return c4::yml::ReadResult(success, node.id());
 }
 @endcode
-If you don't change, rapidyaml will still report the error, but it will be report the node of the outer-most function returning false, instead of the node at the inner-most function.
+
+If you don't change, rapidyaml will still report the error, but on the node of the outer-most function returning false, instead of the node at the inner-most function.
 
 
 <a id="treeid"></a>
-#### Optional: user-implemented `read()`/`write()` should now receive `Tree` and id
+#### Optional: user-implemented `%read()`/`%write()` should now receive `Tree` and id
 
-Your `%read()` and `%write()` implementations should now be rewritten for the `Tree`, instead of the `NodeRef`. This will enable using your `%read()`/`%write()` functions **with both the `Tree` and `NodeRef` methods**:
+If you want to use deserialization from `Tree`, your `%read()` and `%write()` implementations should now be rewritten for `Tree`, instead of `NodeRef`. This will enable using your `%read()`/`%write()` functions **with both the `Tree` and `NodeRef` methods**:
+
 @code{c++}
 // optional: your implementation of write()/read() should be changed from...
 void write(c4::yml::NodeRef *node, T const& var)
@@ -227,30 +227,18 @@ if( ! node.deserialize(&outer))
 @code{c++}
 c4::yml::ReadResult read(c4::yml::Tree const* tree, c4::yml::id_type id, Inner *inner)
 {
-    c4::yml::ReadResult result;
-    c4::yml::id_type id_foo, id_bar;
-    result = tree->find_child_r(id, "foo", &id_foo); // see next note
-    // ensure the result will report the first detected error
-    if(result) result = tree->find_child_r(id, "bar", &id_bar);
-    // now, instead of this...
-    //tree->load(id_foo, &inner->bar); // (formerly >>) calls error_visit on failure!
-    //tree->load(id_bar, &inner->bar); // (formerly >>) calls error_visit on failure!
-    // ... do this:
-    // (enables return on failure, reported upwards)
-    if(result) result = tree->deserialize(id_foo, &inner->foo);
-    if(result) result = tree->deserialize(id_bar, &inner->bar);
+    c4::yml::ReadResult result(tree->is_map(id), id);
+    if(result) result = tree->deserialize_child(id, "foo", &inner->foo);
+    if(result) result = tree->deserialize_child(id, "bar", &inner->foo);
     return result;
 }
 // Likewise for the outer type. Note how an Inner error will be
 // transparently returned:
 c4::yml::ReadResult read(c4::yml::Tree const* tree, c4::yml::id_type id, Outer *outer)
 {
-    c4::yml::ReadResult result;
-    c4::yml::id_type id_inner1, id_inner2;
-    /*      */ result = tree->find_child_r(id, "inner1", &id_inner1); // see next note
-    if(result) result = tree->find_child_r(id, "inner2", &id_inner2);
-    if(result) result = tree->deserialize(id_inner1, &outer->inner1);
-    if(result) result = tree->deserialize(id_inner2, &outer->inner2);
+    c4::yml::ReadResult result(tree->is_map(id), id);
+    if(result) result = tree->deserialize_child(id, "inner1", &outer->inner1);
+    if(result) result = tree->deserialize_child(id, "inner2", &outer->inner2);
     return result;
 }
 @endcode
@@ -268,7 +256,7 @@ This release also adds a family of tree and node methods returning `c4::yml::Rea
 ryml::ReadResult read(ryml::ConstNodeRef const& n, my_type *val)
 {
     ryml::ReadResult r(n.is_map(), n.id());
-    if(r) r = n["v2"].deserialize(&val->v2);
+    if(r) r = n["v2"].deserialize(&val->v2); // don't. using [] will throw error if "v2" is not a child
     if(r) r = n["v3"].deserialize(&val->v3);
     if(r) r = n["v4"].deserialize(&val->v4);
     if(r) r = n["seq"].deserialize(&val->seq);
@@ -299,10 +287,11 @@ Here's the list of new `ReadResult`-returning methods that may be of use in simi
   - The `.get_if()` methods were deprecated in favour of `.deserialize_child()`.
 
 
-<a>v0.16changelogsection</a>
+<a id="v016changelogsection"></a>
 ### Full changelog
 
-- [PR#646](https://github.com/biojppm/rapidyaml/pull/646) remove support for UTF16 and UTF32 encoded files
+- [PR#647](https://github.com/biojppm/rapidyaml/pull/647) remove support for UTF16 and UTF32 encoded files
+- [PR#646](https://github.com/biojppm/rapidyaml/pull/646) improve Doxygen docs, update yamlscript version
 - [PR#645](https://github.com/biojppm/rapidyaml/pull/645) tools: unify ryml-parse-emit and ryml-yaml-events, remove ryml-yaml-events
 - [PR#644](https://github.com/biojppm/rapidyaml/pull/644) amalgamate: add `--fastfloat_sys` to use fastfloat from system
 - [PR#643](https://github.com/biojppm/rapidyaml/pull/643) reduce source archive size: move large data files used in benchmarks to  [rapidyaml-data](https://github.com/biojppm/rapidyaml-data) repo.
@@ -880,7 +869,7 @@ Ensure parse errors for **invalid** YAML cases, and improve reported error locat
   - Added [ParserOptions::detect_flow_ml()](@ref c4::yml::ParserOptions::detect_flow_ml()) to enable/disable this behavior
   - Added [EmitOptions::indent_flow_ml()](@ref c4::yml::EmitOptions::indent_flow_ml()) to control indentation of [FLOW_ML](@ref c4::yml::FLOW_ML1) containers
   - The emit implementation was refactored, and is now significantly cleaner
-  - Emitted YAML will now have anchors emitted before tags, as is customary ([see example](https://play.yaml.io/main/parser?input=LSAhdGFnICZhbmNob3IgfAogIG5vdGUgaG93IHRoZSBhbmNob3IgY29tZXMKICBmaXJzdCBpbiB0aGUgZXZlbnRz)).
+  - Emitted YAML will now have anchors emitted before tags, as is customary ([see example](https://play.yaml.com/main/parser?input=LSAhdGFnICZhbmNob3IgfAogIG5vdGUgaG93IHRoZSBhbmNob3IgY29tZXMKICBmaXJzdCBpbiB0aGUgZXZlbnRz)).
   - Added [ParserOptions](@ref c4::yml::ParserOptions) defaulted argument to temp-parser overloads of `parse_{yaml,json}_in_{place,arena}()`
   - [PR#567](https://github.com/biojppm/rapidyaml/pull/567) (fixes [#566](https://github.com/biojppm/rapidyaml/issues/566)) fixes a regression from this refactor where top-level container anchors were wrongly emitted in the same line if no style was set on the container.
 

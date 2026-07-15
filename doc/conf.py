@@ -8,7 +8,7 @@ import os
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'rapidyaml'
-copyright = '2018-2024 Joao Paulo Magalhaes <dev@jpmag.me>'
+copyright = '2018-2026 Joao Paulo Magalhaes <dev@jpmag.me>'
 author = 'Joao Paulo Magalhaes <dev@jpmag.me>'
 release = '0.15.2'
 

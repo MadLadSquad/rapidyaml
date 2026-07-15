@@ -1,13 +1,7 @@
 #ifndef C4_YML_EXTRA_EVENT_HANDLER_INTS_HPP_
 #define C4_YML_EXTRA_EVENT_HANDLER_INTS_HPP_
 
-/** @file event_handler_ints.hpp An event handler that creates an
- * integer buffer with a very compact representation of the YAML tree
- * in a source buffer. This is not part of the main rapidyaml library.
- *
- * @see c4::yml::extra::ievt::EventBits
- * @see c4::yml::extra::EventHandlerInts
- * */
+/** @file event_handler_ints.hpp */
 
 #ifndef RYML_SINGLE_HEADER
 #ifndef C4_YML_NODE_TYPE_HPP_
@@ -30,192 +24,21 @@ namespace c4 {
 namespace yml {
 namespace extra {
 
-/** @addtogroup doc_event_handlers
- * @{ */
-
-/** data type for integer events size. This is set to an int32_t integer
- * to allow compatibility with a wide range of processing languages. */
-using evt_size = int32_t;
-
-namespace ievt {
-
-
-/** data type for integer events bits. This is set to an int32_t integer
- * to allow compatibility with a wide range of processing languages. */
-using evt_bits = int32_t;
-
-
-/** enumeration of integer event bits. */
-typedef enum : evt_bits { // NOLINT
-
-    //-------------------------------------------------------------------------
-    // YAML flags
-
-    // YAML structure flags
-    KEY_ = (1 <<  0),  ///< as key
-    VAL_ = (1 <<  1),  ///< as value
-
-    // YAML event scopes
-    BEG_ = (1 <<  2),  ///< scope: begin
-    END_ = (1 <<  3),  ///< scope: end
-    SEQ_ = (1 <<  4),  ///< scope: seq
-    MAP_ = (1 <<  5),  ///< scope: map
-    DOC_ = (1 <<  6),  ///< scope: doc
-    EXPL = (1 <<  7),  ///< `---` (with BDOC) or `...` (with EDOC)
-    STRM = (1 <<  8),  ///< scope: stream
-    BSEQ = BEG_|SEQ_,  ///< begin seq    (+SEQ in test suite events)
-    ESEQ = END_|SEQ_,  ///< end seq      (-SEQ in test suite events)
-    BMAP = BEG_|MAP_,  ///< begin map    (+MAP in test suite events)
-    EMAP = END_|MAP_,  ///< end map      (-MAP in test suite events)
-    BSTR = BEG_|STRM,  ///< begin stream (+STR in test suite events)
-    ESTR = END_|STRM,  ///< end stream   (-STR in test suite events)
-    BDOC = BEG_|DOC_,  ///< begin doc    (+DOC in test suite events)
-    EDOC = END_|DOC_,  ///< end doc      (-DOC in test suite events)
-
-    // YAML string events
-    SCLR = (1 <<  9),  ///< scalar (=VAL in test suite events)
-    ALIA = (1 << 10),  ///< *ref (reference)
-    ANCH = (1 << 11),  ///< &anchor
-    TAG_ = (1 << 12),  ///< !tag
-    // directives
-    YAML = (1 << 13),  ///< yaml directive: `\%YAML <version>`
-    TAGH = (1 << 14),  ///< tag directive, handle: `\%TAG <handle> ........`
-    TAGP = (1 << 15),  ///< tag directive, prefix: `\%TAG ........ <prefix>`
-
-    // YAML style flags
-    PLAI = (1 << 16),  ///< scalar: plain
-    SQUO = (1 << 17),  ///< scalar: single-quoted (')
-    DQUO = (1 << 18),  ///< scalar: double-quoted ("")
-    LITL = (1 << 19),  ///< scalar: block literal (|)
-    FOLD = (1 << 20),  ///< scalar: block folded (>)
-    FLOW = (1 << 21),  ///< container: flow: [] for seqs or {} for maps
-    BLCK = (1 << 22),  ///< container: block
-
-    /// Special flag to mark a scalar as unfiltered (when the parser
-    /// is set not to filter).
-    UNFILT = (1 << 23),
-
-    //-------------------------------------------------------------------------
-    // NON-YAML FLAGS
-
-    /// Special flag to mark events whose string was placed in the
-    /// arena. This happens when the filtered string is larger than
-    /// the original string in the YAML code (eg from tags that
-    /// resolve to a larger string, or from "\L" or "\P" in double
-    /// quotes, which expand from two to three bytes). Because of this
-    /// size expansion, the filtered string cannot be placed in the
-    /// original source and needs to be placed in the arena.
-    AREN = (1 << 24),
-
-    /// WithSTRing: mask of all events that encode a string following
-    /// the event. For such events, the next two integers will provide
-    /// respectively the string's offset and length. See also @ref PSTR
-    WSTR = SCLR|ALIA|ANCH|TAG_|TAGH|TAGP|YAML,
-
-    /// Special flag to enable look-back in the event array. It
-    /// signifies that the previous event has a string, meaning that
-    /// the jump back to that event is 3 positions. without this flag it
-    /// would be impossible to jump to the previous event.
-    /// see also @ref WSTR
-    PSTR = (1 << 25),
-
-    /// unused: reserved for future use (to enable rope-like buffers)
-    JUMP = (1 << 26),
-    /// unused: reserved for future use (same purpose as @ref PSTR,
-    /// but for @ref JUMP)
-    PJUMP = (1 << 27),
-
-    /// the last flag defined above
-    LAST = PJUMP,
-
-    /// a mask of all bits in this enumeration
-    MASK = (LAST << 1) - 1,
-
-} EventBits;
-
-/** @cond dev */
-using DataType RYML_DEPRECATED("use evt_bits") = evt_bits;
-using EventFlags RYML_DEPRECATED("use EventBits") = EventBits;
-/** @endcond */
-
-} // namespace ievt
-
-/** @} */
-
-} // namespace extra
-} // namespace yml
-} // namespace c4
-
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
-namespace c4 {
-namespace yml {
-namespace extra {
-
-/** @addtogroup doc_event_handlers
- * @{ */
-
-/** Read YAML source and, without undergoing a full parse, estimate
- * the size of the integer buffer required for @ref
- * EventHandlerInts. This estimation is meant to exceed the actual
- * number of required events.
+/** @addtogroup doc_event_handlers_ints
  *
- * @note This function must overpredict. It does so for every case in
- * the hundreds/thousands of extensive tests of rapidyaml -- both for
- * the YAML test suite and the internal cases. If you find a case
- * where that does not hold, it is a bug. Please report it at
- * https://github.com/biojppm/rapidyaml/issues! */
-RYML_EXPORT evt_size estimate_events_ints_size(csubstr src);
-
-/** @} */
-
-} // namespace extra
-} // namespace yml
-} // namespace c4
-
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
-C4_SUPPRESS_WARNING_GCC_CLANG_PUSH
-C4_SUPPRESS_WARNING_GCC_CLANG("-Wold-style-cast")
-C4_SUPPRESS_WARNING_GCC("-Wuseless-cast")
-
-namespace c4 {
-namespace yml {
-namespace extra {
-
-
-/** @addtogroup doc_event_handlers
- * @{ */
-
-/** @cond dev */
-struct EventHandlerIntsState : public c4::yml::ParserState
-{
-    c4::yml::type_bits evt_type;
-    int32_t evt_id;
-};
-/** @endcond */
-
-
-/** A parser event handler that creates a compact representation of
- * the YAML tree in a contiguous buffer of integers. The integers are
- * @ref ievt::EventBits containing masks (to represent events),
- * interleaved with offset+length (to represent strings in the source
- * buffer).
+ * An event handler used by @ref ParseEngine to creates an integer
+ * buffer with a very compact representation of the YAML tree in a
+ * source buffer. This feature is an extra and is not part of the main
+ * rapidyaml library.
  *
  * This is meant for use by other programming languages, and supports
  * container keys (unlike the ryml tree). It parses faster than the ryml
  * tree parser, because the resulting data structure is much simpler.
  *
- * The resulting integer buffer is a linear array of integers containing
- * events (as a mask of @ref ievt::EventBits), which in some cases (see
- * @ref ievt::WSTR) are followed by an encoded string (encoded as an
- * offset and length to the parsed source buffer).
+ * The resulting integer buffer is a linear array of integers
+ * containing encoded YAML events (as a mask of @ref ievt::EventBits),
+ * which in some cases (eg scalars) are followed by an encoded string
+ * (encoded as an offset and length to the parsed source buffer).
  *
  * For example, parsing `[a, bb, ccc]` results in the following event
  * buffer (grouped to highlight the event sequence structure):
@@ -226,9 +49,9 @@ struct EventHandlerIntsState : public c4::yml::ParserState
  *   BSTR,                        // begin stream
  *   BDOC,                        // begin doc
  *   VAL_|BSEQ|FLOW,              // begin seq as val, flow
- *   VAL_|SCLR|PLAI,      1, 1,   // val scalar, plain style: "a"   starts at offset 1 and has length 1
- *   VAL_|SCLR|PLAI|PSTR, 4, 2,   // val scalar, plain style: "bb"  starts at offset 4 and has length 2; preceded by a string event (PSTR)
- *   VAL_|SCLR|PLAI|PSTR, 8, 3,   // val scalar, plain style: "ccc" starts at offset 8 and has length 3; preceded by a string event (PSTR)
+ *   VAL_|SCLR|PLAI,      1, 1,   // val scalar, plain style, "a"  : string starts at offset 1 and has length 1
+ *   VAL_|SCLR|PLAI|PSTR, 4, 2,   // val scalar, plain style, "bb" : string starts at offset 4 and has length 2; preceded by a string event (PSTR)
+ *   VAL_|SCLR|PLAI|PSTR, 8, 3,   // val scalar, plain style, "ccc": string starts at offset 8 and has length 3; preceded by a string event (PSTR)
  *   ESEQ|PSTR,                   // end seq; preceded by a string event (PSTR)
  *   EDOC,                        // end doc
  *   ESTR,                        // end stream
@@ -345,6 +168,185 @@ i      :        12   |        13       14
  *     }
  * }
  * ```
+ *
+ * @{ */
+
+/** data type for integer events size. This is set to an int32_t integer
+ * to allow compatibility with a wide range of processing languages. */
+using evt_size = int32_t;
+
+namespace ievt {
+
+
+/** data type for integer events bits. This is set to an int32_t integer
+ * to allow compatibility with a wide range of processing languages. */
+using evt_bits = int32_t;
+
+
+/** enumeration of integer event bits. */
+typedef enum : evt_bits { // NOLINT
+
+    //-------------------------------------------------------------------------
+    // YAML flags
+
+    // YAML structure flags
+    KEY_ = (1 <<  0),  ///< as key
+    VAL_ = (1 <<  1),  ///< as value
+
+    // YAML event scopes
+    BEG_ = (1 <<  2),  ///< scope: begin
+    END_ = (1 <<  3),  ///< scope: end
+    SEQ_ = (1 <<  4),  ///< scope: seq
+    MAP_ = (1 <<  5),  ///< scope: map
+    DOC_ = (1 <<  6),  ///< scope: doc
+    EXPL = (1 <<  7),  ///< `---` (with BDOC) or `...` (with EDOC)
+    STRM = (1 <<  8),  ///< scope: stream
+    BSEQ = BEG_|SEQ_,  ///< begin seq    (+SEQ in test suite events)
+    ESEQ = END_|SEQ_,  ///< end seq      (-SEQ in test suite events)
+    BMAP = BEG_|MAP_,  ///< begin map    (+MAP in test suite events)
+    EMAP = END_|MAP_,  ///< end map      (-MAP in test suite events)
+    BSTR = BEG_|STRM,  ///< begin stream (+STR in test suite events)
+    ESTR = END_|STRM,  ///< end stream   (-STR in test suite events)
+    BDOC = BEG_|DOC_,  ///< begin doc    (+DOC in test suite events)
+    EDOC = END_|DOC_,  ///< end doc      (-DOC in test suite events)
+
+    // YAML string events
+    SCLR = (1 <<  9),  ///< scalar (=VAL in test suite events)
+    ALIA = (1 << 10),  ///< *ref (reference)
+    ANCH = (1 << 11),  ///< &anchor
+    TAG_ = (1 << 12),  ///< !tag
+    // directives
+    YAML = (1 << 13),  ///< yaml directive: `\%YAML <version>`
+    TAGH = (1 << 14),  ///< tag directive, handle: `\%TAG <handle> ........`
+    TAGP = (1 << 15),  ///< tag directive, prefix: `\%TAG ........ <prefix>`
+
+    // YAML style flags
+    PLAI = (1 << 16),  ///< scalar: plain
+    SQUO = (1 << 17),  ///< scalar: single-quoted (')
+    DQUO = (1 << 18),  ///< scalar: double-quoted ("")
+    LITL = (1 << 19),  ///< scalar: block literal (|)
+    FOLD = (1 << 20),  ///< scalar: block folded (>)
+    FLOW = (1 << 21),  ///< container: flow: [] for seqs or {} for maps
+    BLCK = (1 << 22),  ///< container: block
+
+    /// Special flag to mark a scalar as unfiltered (when the parser
+    /// is set not to filter).
+    UNFILT = (1 << 23),
+
+    //-------------------------------------------------------------------------
+    // NON-YAML FLAGS
+
+    /// Special flag to mark events whose string was placed in the
+    /// arena. This happens when the filtered string is larger than
+    /// the original string in the YAML code (eg from tags that
+    /// resolve to a larger string, or from "\L" or "\P" in double
+    /// quotes, which expand from two to three bytes). Because of this
+    /// size expansion, the filtered string cannot be placed in the
+    /// original source and needs to be placed in the arena.
+    AREN = (1 << 24),
+
+    /// WithSTRing: mask of all events that encode a string following
+    /// the event. For such events, the next two integers will provide
+    /// respectively the string's offset and length. See also @ref PSTR
+    WSTR = SCLR|ALIA|ANCH|TAG_|TAGH|TAGP|YAML,
+
+    /// Special flag to enable look-back in the event array. It
+    /// signifies that the previous event has a string, meaning that
+    /// the jump back to that event is 3 positions. without this flag it
+    /// would be impossible to jump to the previous event.
+    /// see also @ref WSTR
+    PSTR = (1 << 25),
+
+    /// unused: reserved for future use (to enable rope-like buffers)
+    JUMP = (1 << 26),
+    /// unused: reserved for future use (same purpose as @ref PSTR,
+    /// but for @ref JUMP)
+    PJUMP = (1 << 27),
+
+    /// the last flag defined above
+    LAST = PJUMP,
+
+    /// a mask of all bits in this enumeration
+    MASK = (LAST << 1) - 1,
+
+} EventBits;
+
+/** @cond dev */
+using DataType RYML_DEPRECATED("use evt_bits") = evt_bits;
+using EventFlags RYML_DEPRECATED("use EventBits") = EventBits;
+/** @endcond */
+
+} // namespace ievt
+
+/** @} */ // doc_event_handlers_ints
+
+} // namespace extra
+} // namespace yml
+} // namespace c4
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+namespace c4 {
+namespace yml {
+namespace extra {
+
+/** @addtogroup doc_event_handlers_ints
+ * @{ */
+
+/** Read YAML source and, without undergoing a full parse, estimate
+ * the size of the integer buffer required for @ref
+ * EventHandlerInts. This estimation is meant to exceed the actual
+ * number of required events.
+ *
+ * @note This function must overpredict. It does so for every case in
+ * the hundreds/thousands of extensive tests of rapidyaml -- both for
+ * the YAML test suite and the internal cases. If you find a case
+ * where that does not hold, it is a bug. Please report it at
+ * https://github.com/biojppm/rapidyaml/issues! */
+RYML_EXPORT evt_size estimate_events_ints_size(csubstr src);
+
+/** @} */
+
+} // namespace extra
+} // namespace yml
+} // namespace c4
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+C4_SUPPRESS_WARNING_GCC_CLANG_PUSH
+C4_SUPPRESS_WARNING_GCC_CLANG("-Wold-style-cast")
+C4_SUPPRESS_WARNING_GCC("-Wuseless-cast")
+
+namespace c4 {
+namespace yml {
+namespace extra {
+
+
+/** @addtogroup doc_event_handlers_ints
+ * @{ */
+
+/** @cond dev */
+struct EventHandlerIntsState : public c4::yml::ParserState
+{
+    c4::yml::type_bits evt_type;
+    int32_t evt_id;
+};
+/** @endcond */
+
+
+/** A parser event handler that creates a compact representation of
+ * the YAML tree in a contiguous buffer of integers. The integers are
+ * @ref ievt::EventBits containing masks (to represent events),
+ * interleaved with offset+length (to represent strings in the source
+ * buffer).
+ *
+ * For a description of the events, see @ref doc_event_handlers_ints
  *
  * This handler must be initialized with the input source buffer, the
  * output arena, and the output event buffer. This handler will not take
@@ -996,8 +998,8 @@ public:
 
     /** set the previous val as the first key of a new map, with flow style.
      *
-     * See the documentation for @ref doc_event_handlers, which has
-     * important notes about this event.
+     * See the documentation for @ref doc_event_handlers, which
+     * has important notes about this event.
      */
     C4_NO_INLINE void actually_val_is_first_key_of_new_map_flow()
     {

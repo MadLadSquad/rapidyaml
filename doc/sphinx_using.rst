@@ -20,7 +20,7 @@ If you're in a rush to start, try this:
 
 For alternative ways, continue reading this section.
 
-Each sample brings a ``run.sh`` script with the sequence of commands
+Each sample has a ``run.sh`` script with the sequence of commands
 required to successfully build and run the application (this is a bash
 script and runs in Linux and MacOS, but it is also possible to run in
 Windows via Git Bash or the WSL). Click on the links below to find out
@@ -220,15 +220,17 @@ Here's a quick roundup (possibly outdated):
 
 * Package managers
 
+  * `CPM (CMake Package Manager) <https://github.com/cpm-cmake/cpm.cmake>`_
+
   * `conan <https://conan.io/center/recipes/rapidyaml>`_
     
   * `vcpkg <https://vcpkg.io/en/packages.html>`_: ``vcpkg install ryml``
     
-  * `PyPI <https://pypi.org/project/rapidyaml/>`_
+  * `PyPI (python) <https://pypi.org/project/rapidyaml/>`_
     
 * Linux distributions:
   
-  * Arch Linux/Manjaro:
+  * Arch Linux/Manjaro/Endeavour:
     
     * `rapidyaml (aarch64) <https://archlinuxarm.org/packages/aarch64/rapidyaml>`_
       
@@ -249,9 +251,3 @@ Here's a quick roundup (possibly outdated):
   * `Slackbuilds <https://slackbuilds.org/repository/15.0/libraries/rapidyaml/>`_
     
   * `AltLinux <https://packages.altlinux.org/en/sisyphus/srpms/rapidyaml/3006055151670528141>`_
-  
-Although package managers are very useful for getting quickly up to
-speed, the advised way is still to bring ryml as a submodule of your
-project, building both together. This makes it easy to track any
-upstream changes in ryml. Also, ryml is small and quick to build, so
-there's not much of a cost for building it with your project.

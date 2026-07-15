@@ -111,7 +111,7 @@ namespace your_namespace {
 // needed only if you're deserializing T:
 c4::yml::ReadResult read(c4::yml::ConstNodeRef node, T* var);
 // needed only if you're serializing T:
-void write(c4::yml::NodeRef * node, T const& var);
+void write(c4::yml::NodeRef &node, T const& var); // can also use NodeRef*, or even NodeRef (by value)
 
 } // namespace
 @endcode
@@ -140,29 +140,29 @@ Here are the key considerations:
     directly call the corresponding %read/write() function. Further,
     rapidyaml's default implementation of node is calling into the tree
     %read/write(), so that if you only implement this one, it is
-    automagically picked even if you're calling from nodes. For
-    example:
+    automagically picked even if you're calling from nodes:
 
     @code{c++}
     T var;
 
     // tree calls
-    Tree tree = ...;
-    id_type node_id = ...;
-    node.load(&var)                  // calls read(Tree const*,id_type,T*)
-    if(!node.deserialize(&var)) ...; // calls read(Tree const*,id_type,T*)
-    tree.save(var);                  // calls write(Tree*,id_type,T const&)
-    tree.set_serialized(&var);       // calls write(Tree*,id_type,T const&)
+    c4::yml::Tree tree = ...;
+    c4::yml::id_type id = ...; // node id
+    tree.load(id, &var)              // calls read(Tree const*,id_type,T*)
+    if(!tree.deserialize(id, &var))  // calls read(Tree const*,id_type,T*)
+        ...;
+    tree.save(id, var);              // calls write(Tree*,id_type,T const&)
+    tree.set_serialized(id, &var);   // calls write(Tree*,id_type,T const&)
 
     // node calls - forwarding to tree by default
-    NodeRef node = ...;
+    c4::yml::NodeRef node = ...;
     node.load(&var);                 // calls read(ConstNodeRef const&,T*)
                                      //    -> rapidyaml calls read(Tree const*,id_type,T*)
     if(!node.deserialize(&var)) ...; // calls read(ConstNodeRef const&,T*)
                                      //    -> rapidyaml calls read(Tree const*,id_type,T*)
-    node.save(var);                  // calls write(NodeRef*,T const&)
+    node.save(var);                  // calls write(NodeRef&,T const&)
                                      //    -> rapidyaml calls write(Tree*,id_type,T const&)
-    node.set_serialized(&var);       // calls write(NodeRef*,T const&)
+    node.set_serialized(&var);       // calls write(NodeRef&,T const&)
                                      //    -> rapidyaml calls write(Tree*,id_type,T const&)
     @endcode
 
@@ -243,6 +243,8 @@ structures as the targets.
 
 
 @note See examples of `%write()` implementations:
+  - @ref doc_sample_container_types_brief
+  - @ref doc_sample_container_types
   - @ref doc_serialization_tree_write
   - @ref doc_serialization_node_write
   - see the [vector write implementation](@ref src/c4/yml/std/vector.hpp)

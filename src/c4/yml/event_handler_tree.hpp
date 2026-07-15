@@ -21,7 +21,11 @@ C4_SUPPRESS_WARNING_GCC("-Wnull-dereference")
 namespace c4 {
 namespace yml {
 
-/** @addtogroup doc_event_handlers
+/** @addtogroup doc_event_handlers_tree
+ *
+ * An event handler used by @ref ParseEngine to create the @ref Tree
+ * (see @ref Parser).
+ *
  * @{ */
 
 
