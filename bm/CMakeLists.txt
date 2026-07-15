@@ -166,12 +166,13 @@ endfunction()
 ryml_add_bm_comparison_exe(emit bm_emit.cpp)
 ryml_add_bm_comparison_exe(parse bm_parse.cpp)
 
+
 function(ryml_add_bm_comparison_case target name case_file)
     c4_dbg("adding benchmark case: ${case_file}")
     get_filename_component(case "${case_file}" NAME_WE) # case identifier
     get_filename_component(ext "${case_file}" EXT) # prevent json readers from reading yml data
     if(NOT ("${ext}" STREQUAL ".json"))
-        set(filter_json "ryml_yaml|yaml")
+        set(filter_json "ryml_yaml|rymlints_yaml|yaml")
     endif()
     c4_add_target_benchmark(${target} ${case}
         FILTER "${filter_json}"
@@ -181,18 +182,35 @@ function(ryml_add_bm_comparison_case target name case_file)
     _c4_set_target_folder(ryml-bm-${name}-${case} bm/run)
     add_custom_target(ryml-bm-${name}-${case}-plot
         #DEPENDS ${result_files}
-        COMMAND cmake -E echo "${Python_EXECUTABLE}"
+        COMMAND cmake -E echo "${Python_EXECUTABLE}-------------------------------"
         COMMAND ${Python_EXECUTABLE} --version
-        COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/bm_plot_rapidyaml.py ${name} ${case} ${results_file}
+        COMMAND cmake -E echo "${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/bm_plot_rapidyaml.py ${name} ${case} ${case_file} ${results_file}"
+        COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/bm_plot_rapidyaml.py ${name} ${case} ${case_file} ${results_file}
         )
     _c4_set_target_folder(ryml-bm-${name}-${case}-plot bm/plot)
     add_dependencies(ryml-bm-plot ryml-bm-${name}-${case}-plot)
+    if(NOT TARGET ryml-bm-plot-scatter)
+        add_custom_target(ryml-bm-plot-scatter
+            COMMAND cmake -E echo "${Python_EXECUTABLE}"
+            COMMAND ${Python_EXECUTABLE} --version
+            COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/bm_plot_rapidyaml.py scatter ${CMAKE_CURRENT_BINARY_DIR}/bm-results
+        )
+        _c4_set_target_folder(ryml-bm-plot-scatter bm/run)
+        add_dependencies(ryml-bm-plot ryml-bm-plot-scatter)
+    endif()
+    add_dependencies(ryml-bm-plot-scatter ryml-bm-${name}-${case}-plot)
 endfunction()
 
 
 set(RYML_BM_CASE_MANIFESTS "" CACHE STRING "additional benchmark case manifests")
+if(EXISTS ${C4_EXTERN_DIR}/rapidyaml-data/)
+    list(APPEND ryml_more_bm_manifests
+        ${C4_EXTERN_DIR}/rapidyaml-data/bm/bm-cases.txt
+        ${C4_EXTERN_DIR}/rapidyaml-data/bm/large_yaml_files/bm-cases.txt
+    )
+endif()
 
-foreach(mnf ${RYML_BM_CASE_MANIFESTS} "${CMAKE_CURRENT_LIST_DIR}/cases/bm-cases.txt")
+foreach(mnf ${RYML_BM_CASE_MANIFESTS} "${CMAKE_CURRENT_LIST_DIR}/cases/bm-cases.txt" ${ryml_more_bm_manifests})
     if(NOT EXISTS "${mnf}")
         c4_err("benchmark manifest file not found: ${mnf}")
     endif()

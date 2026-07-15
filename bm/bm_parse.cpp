@@ -11,6 +11,7 @@ static BmCase * C4_RESTRICT s_bm_case = nullptr;
 
 int main(int argc, char** argv)
 {
+    bm::MaybeReenterWithoutASLR(argc, argv);
     BmCase fixture;
     s_bm_case = &fixture;
     s_bm_case->run("PARSE", argc, argv);
@@ -843,36 +844,14 @@ BENCHMARK(bm_rymlints_estimate);
 BENCHMARK(bm_rymlints_json_inplace_reuse_nofilter);
 BENCHMARK(bm_rymlints_json_inplace_reuse);
 
-BENCHMARK(bm_rymlints_yaml_inplace_reuse_nofilter);
-BENCHMARK(bm_rymlints_yaml_inplace_reuse);
-
-
-BENCHMARK(bm_ryml_json_inplace_reuse_nofilter_reserve);
-BENCHMARK(bm_ryml_json_inplace_reuse_nofilter);
-BENCHMARK(bm_ryml_json_inplace_reuse_reserve);
-BENCHMARK(bm_ryml_json_inplace_reuse);
-
-BENCHMARK(bm_ryml_yaml_inplace_reuse_nofilter_reserve);
-BENCHMARK(bm_ryml_yaml_inplace_reuse_nofilter);
-BENCHMARK(bm_ryml_yaml_inplace_reuse_reserve);
-BENCHMARK(bm_ryml_yaml_inplace_reuse);
-
-
-BENCHMARK(bm_ryml_json_arena_reuse_nofilter_reserve);
-BENCHMARK(bm_ryml_json_arena_reuse_nofilter);
-BENCHMARK(bm_ryml_json_arena_reuse_reserve);
-BENCHMARK(bm_ryml_json_arena_reuse);
-
-BENCHMARK(bm_ryml_yaml_arena_reuse_nofilter_reserve);
-BENCHMARK(bm_ryml_yaml_arena_reuse_nofilter);
-BENCHMARK(bm_ryml_yaml_arena_reuse_reserve);
-BENCHMARK(bm_ryml_yaml_arena_reuse);
-
-
 BENCHMARK(bm_rymlints_json_inplace_nofilter_reserve);
 BENCHMARK(bm_rymlints_json_inplace_nofilter);
 BENCHMARK(bm_rymlints_json_inplace_reserve);
 BENCHMARK(bm_rymlints_json_inplace);
+
+
+BENCHMARK(bm_rymlints_yaml_inplace_reuse_nofilter);
+BENCHMARK(bm_rymlints_yaml_inplace_reuse);
 
 BENCHMARK(bm_rymlints_yaml_inplace_nofilter_reserve);
 BENCHMARK(bm_rymlints_yaml_inplace_nofilter);
@@ -880,21 +859,41 @@ BENCHMARK(bm_rymlints_yaml_inplace_reserve);
 BENCHMARK(bm_rymlints_yaml_inplace);
 
 
+BENCHMARK(bm_ryml_json_inplace_reuse_nofilter_reserve);
+BENCHMARK(bm_ryml_json_inplace_reuse_nofilter);
+BENCHMARK(bm_ryml_json_inplace_reuse_reserve);
+BENCHMARK(bm_ryml_json_inplace_reuse);
+
+BENCHMARK(bm_ryml_json_arena_reuse_nofilter_reserve);
+BENCHMARK(bm_ryml_json_arena_reuse_nofilter);
+BENCHMARK(bm_ryml_json_arena_reuse_reserve);
+BENCHMARK(bm_ryml_json_arena_reuse);
+
 BENCHMARK(bm_ryml_json_inplace_nofilter_reserve);
 BENCHMARK(bm_ryml_json_inplace_nofilter);
 BENCHMARK(bm_ryml_json_inplace_reserve);
 BENCHMARK(bm_ryml_json_inplace);
 
-BENCHMARK(bm_ryml_yaml_inplace_nofilter_reserve);
-BENCHMARK(bm_ryml_yaml_inplace_nofilter);
-BENCHMARK(bm_ryml_yaml_inplace_reserve);
-BENCHMARK(bm_ryml_yaml_inplace);
-
-
 BENCHMARK(bm_ryml_json_arena_nofilter_reserve);
 BENCHMARK(bm_ryml_json_arena_nofilter);
 BENCHMARK(bm_ryml_json_arena_reserve);
 BENCHMARK(bm_ryml_json_arena);
+
+
+BENCHMARK(bm_ryml_yaml_inplace_reuse_nofilter_reserve);
+BENCHMARK(bm_ryml_yaml_inplace_reuse_nofilter);
+BENCHMARK(bm_ryml_yaml_inplace_reuse_reserve);
+BENCHMARK(bm_ryml_yaml_inplace_reuse);
+
+BENCHMARK(bm_ryml_yaml_arena_reuse_nofilter_reserve);
+BENCHMARK(bm_ryml_yaml_arena_reuse_nofilter);
+BENCHMARK(bm_ryml_yaml_arena_reuse_reserve);
+BENCHMARK(bm_ryml_yaml_arena_reuse);
+
+BENCHMARK(bm_ryml_yaml_inplace_nofilter_reserve);
+BENCHMARK(bm_ryml_yaml_inplace_nofilter);
+BENCHMARK(bm_ryml_yaml_inplace_reserve);
+BENCHMARK(bm_ryml_yaml_inplace);
 
 BENCHMARK(bm_ryml_yaml_arena_nofilter_reserve);
 BENCHMARK(bm_ryml_yaml_arena_nofilter);
