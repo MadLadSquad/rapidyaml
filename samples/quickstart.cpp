@@ -62,9 +62,9 @@
  *
  * @code{bash}
  * # configure the project
- * cmake -S . -B build
+ * cmake -B build
  * # build and run
- * cmake --build build --target ryml-quickstart -j
+ * cmake --build build --target run -j
  * # optionally, open in your IDE
  * cmake --open build
  * @endcode
@@ -117,6 +117,7 @@ void sample_formatting();           ///< control formatting when serializing/des
 void sample_base64();               ///< encode/decode base64
 void sample_serialize_basic();      ///< serialize/deserialize fundamental types
 void sample_user_scalar_types();    ///< serialize/deserialize scalar (leaf/scalar) types
+void sample_user_container_types_brief(); ///< serialize/deserialize container (map or seq) types: brief version
 void sample_user_container_types(); ///< serialize/deserialize container (map or seq) types
 void sample_std_types();            ///< serialize/deserialize STL containers
 void sample_deserialize_error();    ///< shows error on deserializing nested nodes
@@ -261,6 +262,7 @@ int main(int argc, const char* argv[])
     sample_base64();
     sample_serialize_basic();
     sample_user_scalar_types();
+    sample_user_container_types_brief();
     sample_user_container_types();
     sample_std_types();
     sample_deserialize_error();
@@ -4008,7 +4010,7 @@ template<class T> bool from_chars(ryml::csubstr buf, parse_only_vec4<T> *v) { si
 /** to add scalar types (ie leaf types converting to/from string),
  * define the functions above for those types.
  *
- * @warning read the doxygen documentation for scalar types at:
+ * @note read the doxygen documentation for scalar types at:
  *    https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
  *
  * See @ref
@@ -4016,27 +4018,26 @@ template<class T> bool from_chars(ryml::csubstr buf, parse_only_vec4<T> *v) { si
 void sample_user_scalar_types()
 {
     ryml::Tree t;
-
-    auto r = t.rootref();
-    r.set_map();
+    ryml::NodeRef root = t;
+    root.set_map();
 
     vec2<int> v2in{10, 11};
     vec2<int> v2out{1, 2};
-    r["v2"].save(v2in); // serializes to the tree's arena, and then sets the val
-    r["v2"].load(&v2out);
+    root["v2"].save(v2in); // serializes to the tree's arena, and then sets the val
+    root["v2"].load(&v2out);
     CHECK(v2in.x == v2out.x);
     CHECK(v2in.y == v2out.y);
     vec3<int> v3in{100, 101, 102};
     vec3<int> v3out{1, 2, 3};
-    r["v3"].save(v3in); // serializes to the tree's arena, and then sets the val
-    r["v3"].load(&v3out);
+    root["v3"].save(v3in); // serializes to the tree's arena, and then sets the val
+    root["v3"].load(&v3out);
     CHECK(v3in.x == v3out.x);
     CHECK(v3in.y == v3out.y);
     CHECK(v3in.z == v3out.z);
     vec4<int> v4in{1000, 1001, 1002, 1003};
     vec4<int> v4out{1, 2, 3, 4};
-    r["v4"].save(v4in); // serializes to the tree's arena, and then sets the val
-    r["v4"].load(&v4out);
+    root["v4"].save(v4in); // serializes to the tree's arena, and then sets the val
+    root["v4"].load(&v4out);
     CHECK(v4in.x == v4out.x);
     CHECK(v4in.y == v4out.y);
     CHECK(v4in.z == v4out.z);
@@ -4052,21 +4053,21 @@ void sample_user_scalar_types()
     //   - if a type is only emitted, then only to_chars() is needed
     emit_only_vec2<int> eov2in{20, 21}; // only has to_chars()
     parse_only_vec2<int> pov2out{1, 2}; // only has from_chars()
-    r["v2"].save(eov2in); // serializes to the tree's arena, and then sets the keyval
-    r["v2"].load(&pov2out);
+    root["v2"].save(eov2in); // serializes to the tree's arena, and then sets the keyval
+    root["v2"].load(&pov2out);
     CHECK(eov2in.x == pov2out.x);
     CHECK(eov2in.y == pov2out.y);
     emit_only_vec3<int> eov3in{30, 31, 32}; // only has to_chars()
     parse_only_vec3<int> pov3out{1, 2, 3}; // only has from_chars()
-    r["v3"].save(eov3in); // serializes to the tree's arena, and then sets the keyval
-    r["v3"].load(&pov3out);
+    root["v3"].save(eov3in); // serializes to the tree's arena, and then sets the keyval
+    root["v3"].load(&pov3out);
     CHECK(eov3in.x == pov3out.x);
     CHECK(eov3in.y == pov3out.y);
     CHECK(eov3in.z == pov3out.z);
     emit_only_vec4<int> eov4in{40, 41, 42, 43}; // only has to_chars()
     parse_only_vec4<int> pov4out{1, 2, 3, 4}; // only has from_chars()
-    r["v4"].save(eov4in); // serializes to the tree's arena, and then sets the keyval
-    r["v4"].load(&pov4out);
+    root["v4"].save(eov4in); // serializes to the tree's arena, and then sets the keyval
+    root["v4"].load(&pov4out);
     CHECK(eov4in.x == pov4out.x);
     CHECK(eov4in.y == pov4out.y);
     CHECK(eov4in.z == pov4out.z);
@@ -4079,7 +4080,7 @@ void sample_user_scalar_types()
 
 
 //-----------------------------------------------------------------------------
-// ryml uses Argument Dependent Lookup to dispatch the serialization
+// ryml uses C++'s Argument Dependent Lookup to dispatch the serialization
 // to each type. This enables the user to implement serialization for
 // custom types (and also enables rapidyaml to implement serialization
 // of fundamental types).
@@ -4087,9 +4088,89 @@ void sample_user_scalar_types()
 /** @addtogroup doc_quickstart_helpers
  * @{ */
 
-/** @defgroup doc_sample_container_types Serialize/deserialize container types
+/** @defgroup doc_sample_container_types_brief Serialize container types (brief)
+ *
+ * Serialization definitions used in @ref sample_user_container_types_brief()
+ *
  * @{ */
 
+// let's start with a brief, minimal example, and expand below.
+
+// first define an example nested user type:
+struct Inner { int foo, bar; };   /// serializes as a map
+struct Outer { Inner inner[2]; }; /// serializes as a seq
+
+// now define the write functions:
+void write(ryml::NodeRef &n, Inner const& inner)
+{
+    n.set_map(ryml::FLOW_SL);
+    n["foo"].set_serialized(inner.foo);
+    n["bar"].set_serialized(inner.bar);
+}
+void write(ryml::NodeRef &n, Outer const& outer)
+{
+    n.set_seq(ryml::BLOCK);
+    n[0].set_serialized(outer.inner[0]);
+    n[1].set_serialized(outer.inner[1]);
+}
+
+// now define the read functions:
+ryml::ReadResult read(ryml::ConstNodeRef const& n, Inner *inner)
+{
+    ryml::ReadResult r(n.is_map(), n.id());
+    if(r) r = n.deserialize_child("foo", &inner->foo); // O(N)
+    if(r) r = n.deserialize_child("bar", &inner->bar);
+    return r;
+}
+ryml::ReadResult read(ryml::ConstNodeRef const& n, Outer *val)
+{
+    ryml::ReadResult r(n.is_seq(), n.id());
+    // size is fixed, so we do this with explicit indices.
+    if(r) r = n.deserialize_child(0, &val->inner[0]); // O(N)
+    if(r) r = n.deserialize_child(1, &val->inner[1]);
+    return r;
+}
+
+/** @} */
+
+/** @} */
+
+/** shows a minimal example of user container types, defined in @ref doc_sample_container_types_brief
+ *
+ * @note read the doxygen documentation for containers/general types at:
+ *    https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
+ */
+void sample_user_container_types_brief()
+{
+    ryml::Tree tree;
+    ryml::NodeRef root = tree;
+    Outer outer{{{0,1}, {2,3}}};
+    Outer roundtrip;
+    // let's do a serialization roundtrip.
+    // first serialize:
+    root.save(outer);
+    // see how the YAML looks:
+    CHECK(ryml::emitrs_yaml<std::string>(tree) == ""
+          "- {foo: 0,bar: 1}\n"
+          "- {foo: 2,bar: 3}\n");
+    // now complete the roundtrip by deserializing:
+    root.load(&roundtrip);
+    // finally, verify that the result is equal:
+    CHECK(0 == memcmp(&outer, &roundtrip, sizeof(Outer)));
+}
+
+
+//-----------------------------------------------------------------------------
+// let's now elaborate further
+
+/** @addtogroup doc_quickstart_helpers
+ * @{ */
+
+/** @defgroup doc_sample_container_types Serialize container types
+ *
+ * Serialization definitions used in @ref sample_user_container_types()
+ *
+ * @{ */
 
 /** example user container type: seq-like */
 template<class T>
@@ -4170,7 +4251,7 @@ void write(ryml::Tree *tree, ryml::id_type id, my_seq_type<T> const& seq)
         tree->set_serialized(tree->append_child(id), v);
     }
 }
-// special optimization: if all you have are strings, AND you are sure
+// special optimization: if all you have is strings, AND you are sure
 // they outlive the tree, you can avoid the copy to the tree's
 // arena. But beware the lifetime issue!
 void write(ryml::Tree *tree, ryml::id_type id, my_seq_type<std::string> const& seq)
@@ -4179,8 +4260,8 @@ void write(ryml::Tree *tree, ryml::id_type id, my_seq_type<std::string> const& s
     for(std::string const& v : seq.seq_member)
     {
         // now the tree is pointing at seq's strings. using .set_val()
-        // does not serialize, and this avoids the copy to the tree's
-        // arena
+        // does not serialize, and this avoids the string copy to the
+        // tree's arena
         tree->set_val(tree->append_child(id), ryml::to_csubstr(v));
     }
 }
@@ -4221,7 +4302,8 @@ void write(ryml::Tree *tree, ryml::id_type id, my_type const& val)
 
 
 // Now let's implement the read() functions. Here we have more work to
-// do because we need to check the data coming from YAML.
+// do because in general we need to check the sanity of the data
+// coming from YAML.
 //
 // IMPORTANT: read the doxygen documentation for deserialization of user types:
 // https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
@@ -4279,11 +4361,11 @@ ryml::ReadResult read(ryml::Tree const* tree, ryml::id_type id, my_map_type<K, V
 // check every step. We use .deserialize_child() which will look for a
 // child by key, and deserialize that child, returning the deserialize
 // result. If no such child exists, it returns a read result reporting
-// the node (not the child).
+// the node (not the child). .deserialize_child() also works with
+// indices, simplifying the implementation of fixed-size seqs.
 //
-// Note also how each step is defended in an if-condition on the
-// current result. This will ensure that the first failing step is
-// reported.
+// Note also how each step is predicated on the latest result. This
+// will ensure that the first failing step is reported.
 ryml::ReadResult read(ryml::ConstNodeRef const& n, my_type *val)
 {
     ryml::ReadResult r(n.is_map(), n.id()); // node must be a map
@@ -4293,6 +4375,7 @@ ryml::ReadResult read(ryml::ConstNodeRef const& n, my_type *val)
     if(r) r = n.deserialize_child("seq", &val->seq);
     if(r) r = n.deserialize_child("map", &val->map);
     // hint: you can also add a default argument for when no such child exists
+    // hint: you can also use indices instead of keys
     return r;
 }
 // But if you're going to ever deserialize from a tree+id, then, you
@@ -4310,6 +4393,7 @@ ryml::ReadResult read(ryml::Tree const* tree, ryml::id_type id, my_type *val)
     if(r) r = tree->deserialize_child(id, "seq", &val->seq);
     if(r) r = tree->deserialize_child(id, "map", &val->map);
     // hint: you can also add a default argument for when no such child exists
+    // hint: you can also use indices instead of keys
     return r;
 }
 
@@ -4318,9 +4402,9 @@ ryml::ReadResult read(ryml::Tree const* tree, ryml::id_type id, my_type *val)
 /** @} */ // quickstart_helpers
 
 
-/** shows how to serialize/deserialize container types.
+/** shows how to serialize/deserialize container types (defined in @ref doc_sample_container_types).
  *
- * @warning read the doxygen documentation for containers/general types at:
+ * @note read the doxygen documentation for containers/general types at:
  *    https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
  *
  * @see doc_sample_container_types
@@ -4419,7 +4503,7 @@ void sample_user_container_types()
 
 /** shows what happens on deserialization errors
  *
- * @warning read the doxygen documentation for containers/general types at:
+ * @note read the doxygen documentation for containers/general types at:
  *    https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
  *
  * @see sample_user_container_types()

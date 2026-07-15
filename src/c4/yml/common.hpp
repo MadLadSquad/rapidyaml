@@ -87,7 +87,7 @@ static_assert(RYML_LOGBUF_SIZE < RYML_ERRMSG_SIZE, "invalid size");
 #ifdef RYML_WITH_LEGACY_OPERATORS
 #   define RYML_LEGACY_OPERATOR(txt)
 #else
-#   define RYML_LEGACY_OPERATOR(txt) RYML_DEPRECATED(txt ". To enable this legacy operator, define the symbol RYML_WITH_LEGACY_OPERATORS while compiling")
+#   define RYML_LEGACY_OPERATOR(txt) RYML_DEPRECATED(txt ". To avoid this warning, define the symbol RYML_WITH_LEGACY_OPERATORS while compiling")
 #endif
 
 #define RYML_CHECK_TYPE_IS_WRAPPER_LIKE_(type)                          \

@@ -29,6 +29,20 @@ namespace yml {
 /** @defgroup doc_parse_in_arena__with_temporary_parser Parse in arena with temporary parser
  * @ingroup doc_parse
  */
+/** @defgroup doc_event_handlers Event Handlers
+ *
+ * Policy classes to use with the @ref ParseEngine, to create
+ * side-effects from YAML events.
+ *
+ * @ingroup doc_parse
+ */
+/** @defgroup doc_event_handlers_tree Tree Event Handler
+ * @ingroup doc_event_handlers
+ */
+/** @defgroup doc_event_handlers_ints Ints Event Handler
+ * @ingroup doc_event_handlers
+ */
+
 
 
 /** @defgroup doc_node_type Node types

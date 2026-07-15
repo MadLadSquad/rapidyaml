@@ -56,7 +56,7 @@ Table of contents
    :maxdepth: 3
 
    Doxygen docs <doxygen/index.html#https://>
-   YAML playground <https://play.yaml.io/main/parser?input=IyBFZGl0IE1lIQoKJVlBTUwgMS4yCi0tLQpmb286IEhlbGxvLCBZQU1MIQpiYXI6IFsxMjMsIHRydWVdCmJhejoKLSBvbmUKLSB0d28KLSBudWxsCg==>
+   YAML playground <https://play.yaml.com/main/parser?input=IyBFZGl0IE1lIQoKJVlBTUwgMS4yCi0tLQpmb286IEhlbGxvLCBZQU1MIQpiYXI6IFsxMjMsIHRydWVdCmJhejoKLSBvbmUKLSB0d28KLSBudWxsCg==>
    ./sphinx_quicklinks
    ./sphinx_is_it_rapid
    ./sphinx_yaml_standard

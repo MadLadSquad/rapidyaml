@@ -1,43 +1,64 @@
 CMake build settings
 ====================
 
-The following cmake variables can be used to control the build behavior
-of ryml:
+The following cmake variables / macros can be used to control the
+build behavior of ryml:
 
--  ``RYML_WITH_TAB_TOKENS=ON/OFF``. Enable/disable support for tabs as
-   valid container tokens after ``:`` and ``-``. Defaults to ``OFF``,
-   because this may cost up to 10% in processing time.
--  ``RYML_DEFAULT_CALLBACKS=ON/OFF``. Enable/disable ryml’s default
-   implementation of error and allocation callbacks. Defaults to ``ON``.
--  ``RYML_DEFAULT_CALLBACK_USES_EXCEPTIONS=ON/OFF`` - Enable/disable the
-   same-named macro, which will make the default error handlers provided
-   by ryml throw exceptions. Defaults to ``OFF``.
+- ``RYML_WITH_TAB_TOKENS=ON/OFF``. Enable/disable support for tabs as
+  valid container tokens after ``:`` and ``-``. Defaults to ``OFF``,
+  because this may cost up to 10% in processing time.
+- ``RYML_WITH_LEGACY_OPERATORS=ON/OFF``. Enable/disable the old legacy
+  operators (in practice, deactivate/activate the deprecation
+  annotation on these operators): ``=, |=, <<, >>``. Defaults to
+  ``OFF`` (ie deprecation active).
+- ``RYML_DEFAULT_CALLBACKS=ON/OFF``. Enable/disable ryml’s default
+  implementation of error and allocation callbacks. Defaults to ``ON``.
+- ``RYML_DEFAULT_CALLBACK_USES_EXCEPTIONS=ON/OFF`` - Enable/disable the
+  same-named macro, which will make the default error handlers provided
+  by ryml throw exceptions. Defaults to ``OFF``.
 - ``RYML_USE_ASSERT=ON/OFF``. Enable/disable assertions regardless of
-   of the ``NDEBUG`` macro. When set to ``OFF`` (the default), ryml
-   asserts unless ``NDEBUG`` is defined, making it so that assertions
-   are enabled in Debug builds and disabled in Release builds (which
-   usually have ``NDEBUG`` defined). When ``RYML_USE_ASSERT`` is set to
-   ``ON``, assertions are enabled even if ``NDEBUG`` is defined; with
-   this, assertions will be enabled in all build types regardless of
-   ``NDEBUG`` definition status. Failed assertions will trigger a call
-   to the error callback.
--  ``RYML_SHORT_CHECK_MSG`` - Use shorter error message from
-   checks/asserts: do not show the check condition in the error
-   message.
-- ``RYML_STANDALONE=ON/OFF``. Use ryml in standalone mode, where the
-   code from `c4core <https://github.com/biojppm/c4core>`__ is used as
-   part of ryml (ie, as part of the ryml library). Defaults to
-   ``ON``. See the next section for further details.
-- ``RYML_INSTALL=ON/OFF``. enable/disable install target. Defaults to ``ON``.
+  of the ``NDEBUG`` macro. When set to ``OFF`` (the default), ryml
+  asserts unless ``NDEBUG`` is defined, making it so that assertions
+  are enabled in Debug builds and disabled in Release builds (which
+  usually have ``NDEBUG`` defined). When ``RYML_USE_ASSERT`` is set to
+  ``ON``, assertions are enabled even if ``NDEBUG`` is defined; with
+  this, assertions will be enabled in all build types regardless of
+  ``NDEBUG`` definition status. Failed assertions will trigger a call
+  to the error callback.
+- ``RYML_SHORT_CHECK_MSG=ON/OFF`` - Use shorter error message from
+  checks/asserts: do not show the check condition in the error
+  message. Defaults to ``OFF``.
 
-If you’re developing ryml or just debugging problems with ryml itself,
-the following cmake variables can be helpful:
+When set to a non-default value, the variables above will cause a
+same-named macro to be defined in the compilation line. So you can use
+these defines when using an amalgamated ryml.
+
+When compiling ryml as a shared library, the cmake project enables the
+following variables to control symbol exports. You will have to
+explicitly set these macros manually when using an amalgamated ryml:
+
+- ``RYML_SHARED`` should be defined when compiling, and should also be
+  defined when linking with ryml.
+- ``RYML_EXPORTS`` should be defined when compiling, and should *not*
+  be defined when linking with ryml.
+
+Finally, if you’re developing ryml or just debugging problems with
+ryml itself, the following cmake variables can be helpful (also as
+macros):
 
 - ``RYML_DEV=ON/OFF``: a bool variable which enables development targets
   such as unit tests, benchmarks, etc. Defaults to ``OFF``.
 - ``RYML_DBG=ON/OFF``: a bool variable which enables verbose prints from
   parsing code; can be useful to figure out parsing problems. Defaults
   to ``OFF``.
+
+These variables control aspects of the cmake project:
+
+- ``RYML_STANDALONE=ON/OFF``. Use ryml in standalone mode, where the
+  code from `c4core <https://github.com/biojppm/c4core>`__ is used as
+  part of ryml (ie, as part of the ryml library). Defaults to
+  ``ON``. See the next section for further details.
+- ``RYML_INSTALL=ON/OFF``. enable/disable install target. Defaults to ``ON``.
 
 
 Forcing ryml to use a different c4core version

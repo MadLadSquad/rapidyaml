@@ -3,7 +3,7 @@ Quick links
 
 * `API documentation (Doxygen) <./doxygen/index.html>`_
 
-* `YAML playground <https://play.yaml.io/main/parser?input=IyBFZGl0IE1lIQoKJVlBTUwgMS4yCi0tLQpmb286IEhlbGxvLCBZQU1MIQpiYXI6IFsxMjMsIHRydWVdCmJhejoKLSBvbmUKLSB0d28KLSBudWxsCg==>`_
+* `YAML playground <https://play.yaml.com/main/parser?input=IyBFZGl0IE1lIQoKJVlBTUwgMS4yCi0tLQpmb286IEhlbGxvLCBZQU1MIQpiYXI6IFsxMjMsIHRydWVdCmJhejoKLSBvbmUKLSB0d28KLSBudWxsCg==>`_
 
 * YAML Test Suite `online <https://matrix.yaml.info>`_ / `Github <https://github.com/yaml/yaml-test-suite>`_
 

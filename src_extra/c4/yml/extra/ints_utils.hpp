@@ -13,7 +13,7 @@ namespace yml {
 namespace extra {
 
 
-/** @addtogroup doc_event_handlers
+/** @addtogroup doc_event_handlers_ints
  * @{ */
 
 

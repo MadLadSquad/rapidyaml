@@ -179,7 +179,7 @@ RYML_EXPORT Tree parse_json_in_place(                  substr json              
  *
  * @{
  */
-
+/** @cond dev */
 #define RYML_DONT_PARSE_SUBSTR_IN_ARENA ""                      \
     "Do not pass a (mutable) substr to parse_in_arena(); "      \
     "if you have a substr, it should be parsed in place. "      \
@@ -187,6 +187,7 @@ RYML_EXPORT Tree parse_json_in_place(                  substr json              
     "the buffer to csubstr prior to calling. This function "    \
     " is deliberately left undefined, so that calling it "      \
     "will cause a linker error."
+/** @endcond */
 
 // this is vertically aligned to highlight the parameter differences.
 RYML_EXPORT void parse_in_arena(Parser *parser, csubstr filename, csubstr yaml, Tree *t, id_type node_id); ///< (1) parse YAML into an existing tree node. The filename will be used in any error messages arising during the parse.

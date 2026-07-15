@@ -12,6 +12,7 @@ static BmCase * C4_RESTRICT s_bm_case = nullptr;
 
 int main(int argc, char** argv)
 {
+    bm::MaybeReenterWithoutASLR(argc, argv);
     BmCase fixture;
     s_bm_case = &fixture;
     s_bm_case->run("EMIT", argc, argv);
