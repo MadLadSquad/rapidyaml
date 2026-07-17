@@ -65,3 +65,8 @@
   - sparc64.cmake
   - sparc.cmake
   - Toolchain-Arm-ubuntu.cmake
+
+- origdir: ext/c4core/.github
+  copydir: proj
+  files:
+  - check_abi.sh
