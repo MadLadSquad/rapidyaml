@@ -77,6 +77,15 @@ and [the roadmap](https://github.com/biojppm/rapidyaml/tree/master/ROADMAP.md).
 ryml is permissively licensed under the [MIT license](LICENSE.txt).
 
 
+## YAML standard conformance
+
+ryml is fully conformant to the YAML specification, and it passes all
+of the cases in the YAML test suite. There are some minor deliberate
+deviations in default behavior; [refer to the relevant
+page](https://rapidyaml.readthedocs.io/latest/sphinx_yaml_standard.html)
+for more information.
+
+
 ## Is it rapid?
 
 Talk is cheap, so here are some performance plots with [an example yaml file](./bm/cases/travis.yml) using [parse](./bm/bm_parse.cpp) and [emit](./bm/bm_emit.cpp) benchmarks, comparing ryml with [yamlcpp](https://github.com/jbeder/yaml-cpp), [libyaml](https://github.com/yaml/libyaml) and [fyaml](https://github.com/pantoniou/libfyaml) (click the image to see the data):
@@ -171,25 +180,6 @@ For example, here are some results for [`c4::xtoa<int64>()`](https://rapidyaml.r
 </td>
 </tr>
 </table>
-
-
-## YAML standard conformance
-
-ryml is fully conformant and feature-complete with regards to the YAML
-specification, and it passes all of the cases in the YAML test
-suite. There are some minor deliberate deviations in default
-behavior; [refer to the relevant
-page](https://rapidyaml.readthedocs.io/latest/sphinx_yaml_standard.html)
-for more information.
-
-
-> [!NOTE] 
-> There are many dark corners in YAML, and there can certainly appear
-> some cases which ryml fails to parse. If you find any such case,
-> your [bug reports or pull
-> requests](https://github.com/biojppm/rapidyaml/issues) are very
-> welcome.
-
 
 
 ------

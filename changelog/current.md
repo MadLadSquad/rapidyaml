@@ -276,6 +276,8 @@ Here's the list of new `ReadResult`-returning methods that may be of use in simi
 <a id="v016changelogsection"></a>
 ## Full changelog
 
+- [PR#649](https://github.com/biojppm/rapidyaml/pull/649) commit to ABI stability on patch releases before 0.x, then on minor releases after 1.x
+- [PR#648](https://github.com/biojppm/rapidyaml/pull/648) improve documentation, add benchmark results
 - [PR#647](https://github.com/biojppm/rapidyaml/pull/647) remove support for UTF16 and UTF32 encoded files
 - [PR#646](https://github.com/biojppm/rapidyaml/pull/646) improve Doxygen docs, update yamlscript version
 - [PR#645](https://github.com/biojppm/rapidyaml/pull/645) tools: unify ryml-parse-emit and ryml-yaml-events, remove ryml-yaml-events

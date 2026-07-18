@@ -127,7 +127,7 @@ def copy(filename: str, srcdir: str, dstdir: str):
         else:
             ok = False
             print(f"{dstfile}: err, not git-controlled, refusing to overwrite")
-    else:
+    elif osp.exists(dstfile):
         ok = False
         print(f"{dstfile}: err, not a file")
     # https://stackoverflow.com/questions/36821178/how-to-shutil-copyfile-only-if-file-differ
