@@ -86,5 +86,5 @@ However, you may prefer to use a separate or installed version of
 c4core, maybe even with a different version. This is opt-in behavior:
 you need to set ``RYML_STANDALONE=OFF`` while invoking cmake. You can
 find out how to achieve this by looking at the `custom_c4core sample
-<https://github.com/biojppm/rapidyaml/blob/v0.15.2/samples/custom_c4core/CMakeLists.txt>`__.
+<https://github.com/biojppm/rapidyaml/blob/v0.16.0/samples/custom_c4core/CMakeLists.txt>`__.
 

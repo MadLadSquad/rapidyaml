@@ -1,6 +1,6 @@
 # rapidyaml
 
-* [project's README](https://github.com/biojppm/rapidyaml/blob/v0.15.2/README.md)
+* [project's README](https://github.com/biojppm/rapidyaml/blob/v0.16.0/README.md)
 * [readthedocs page](https://rapidyaml.readthedocs.org)
 * To start exploring ryml's API:
   1. locate the navigation side bar, to the left of this text

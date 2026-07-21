@@ -2,7 +2,7 @@
 
 /** @addtogroup doc_quickstart
  *
- * Best seen online at https://rapidyaml.readthedocs.io/v0.15.2/doxygen/
+ * Best seen online at https://rapidyaml.readthedocs.io/v0.16.0/doxygen/
  *
  * This file does a quick tour of ryml. It has multiple self-contained
  * and well-commented samples that illustrate how to use ryml, and how
@@ -33,7 +33,7 @@
  * The directories that exist side-by-side with this file contain
  * several examples on how to build this with cmake, such that you can
  * hit the ground running. See [the relevant section of the main
- * README](https://github.com/biojppm/rapidyaml/tree/v0.15.2?tab=readme-ov-file#quickstart-samples)
+ * README](https://github.com/biojppm/rapidyaml/tree/v0.16.0?tab=readme-ov-file#quickstart-samples)
  * for an overview of the different choices. I suggest starting first
  * with the `add_subdirectory` example, treating it just like any
  * other self-contained cmake project.
@@ -47,7 +47,7 @@
  * include(FetchContent)
  * FetchContent_Declare(ryml
  *     GIT_REPOSITORY https://github.com/biojppm/rapidyaml.git
- *     GIT_TAG v0.15.2
+ *     GIT_TAG v0.16.0
  * )
  * FetchContent_MakeAvailable(ryml)
  * add_executable(ryml-quickstart ${ryml_SOURCE_DIR}/samples/quickstart.cpp)
@@ -3869,7 +3869,7 @@ void sample_base64()
  * types. For samples on how to implement other types such as STL
  * containers or user types, see the samples below.
  *
- * Read also the [doxygen intro to using serialization](https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__using.html)
+ * Read also the [doxygen intro to using serialization](https://rapidyaml.readthedocs.io/v0.16.0/doxygen/group__doc__serialization__using.html)
  */
 void sample_serialize_basic()
 {
@@ -3963,7 +3963,7 @@ void sample_serialize_basic()
  * @{ */
 
 // IMPORTANT: read the doxygen documentation for scalar serialization at:
-// https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
+// https://rapidyaml.readthedocs.io/v0.16.0/doxygen/group__doc__serialization__user__types.html
 
 template<class T> struct vec2 { T x, y; };  ///< example scalar type, serialized and deserialized
 template<class T> struct vec3 { T x, y, z; };  ///< example scalar type, serialized and deserialized
@@ -4001,7 +4001,7 @@ template<class T> bool from_chars(ryml::csubstr buf, parse_only_vec4<T> *v) { si
 
 
 // IMPORTANT: read the doxygen documentation for scalar serialization at:
-// https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
+// https://rapidyaml.readthedocs.io/v0.16.0/doxygen/group__doc__serialization__user__types.html
 
 /** @} */ // doc_sample_scalar_types
 /** @} */ // doc_quickstart_helpers
@@ -4011,7 +4011,7 @@ template<class T> bool from_chars(ryml::csubstr buf, parse_only_vec4<T> *v) { si
  * define the functions above for those types.
  *
  * @note read the doxygen documentation for scalar types at:
- *    https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
+ *    https://rapidyaml.readthedocs.io/v0.16.0/doxygen/group__doc__serialization__user__types.html
  *
  * See @ref
  * doc_sample_scalar_types. */
@@ -4138,7 +4138,7 @@ ryml::ReadResult read(ryml::ConstNodeRef const& n, Outer *val)
 /** shows a minimal example of user container types, defined in @ref doc_sample_container_types_brief
  *
  * @note read the doxygen documentation for containers/general types at:
- *    https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
+ *    https://rapidyaml.readthedocs.io/v0.16.0/doxygen/group__doc__serialization__user__types.html
  */
 void sample_user_container_types_brief()
 {
@@ -4234,7 +4234,7 @@ struct my_type
 
 
 // IMPORTANT: read the doxygen documentation for deserialization of user types:
-// https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
+// https://rapidyaml.readthedocs.io/v0.16.0/doxygen/group__doc__serialization__user__types.html
 
 
 // Let's first show examples of serialization (writing) functions:
@@ -4306,7 +4306,7 @@ void write(ryml::Tree *tree, ryml::id_type id, my_type const& val)
 // coming from YAML.
 //
 // IMPORTANT: read the doxygen documentation for deserialization of user types:
-// https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
+// https://rapidyaml.readthedocs.io/v0.16.0/doxygen/group__doc__serialization__user__types.html
 
 
 template<class T>
@@ -4405,7 +4405,7 @@ ryml::ReadResult read(ryml::Tree const* tree, ryml::id_type id, my_type *val)
 /** shows how to serialize/deserialize container types (defined in @ref doc_sample_container_types).
  *
  * @note read the doxygen documentation for containers/general types at:
- *    https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
+ *    https://rapidyaml.readthedocs.io/v0.16.0/doxygen/group__doc__serialization__user__types.html
  *
  * @see doc_sample_container_types
  * @see sample_std_types
@@ -4504,7 +4504,7 @@ void sample_user_container_types()
 /** shows what happens on deserialization errors
  *
  * @note read the doxygen documentation for containers/general types at:
- *    https://rapidyaml.readthedocs.io/v0.15.2/doxygen/group__doc__serialization__user__types.html
+ *    https://rapidyaml.readthedocs.io/v0.16.0/doxygen/group__doc__serialization__user__types.html
  *
  * @see sample_user_container_types()
  * @see sample_error_visit_location()

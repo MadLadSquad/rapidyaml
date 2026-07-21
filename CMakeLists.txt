@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.13)
 project(ryml
-    VERSION 0.15.2
+    VERSION 0.16.0
     DESCRIPTION "Rapid YAML parsing and emitting"
     HOMEPAGE_URL "https://github.com/biojppm/rapidyaml"
     LANGUAGES CXX)
 include(./proj/compat.cmake)
 include(./proj/c4proj/c4Project.cmake)
 
-c4_project(VERSION 0.15.2 STANDALONE
+c4_project(VERSION 0.16.0 STANDALONE
     AUTHOR "Joao Paulo Magalhaes <dev@jpmag.me>")
 
 

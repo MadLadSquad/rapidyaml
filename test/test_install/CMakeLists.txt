@@ -4,7 +4,7 @@ project(ryml
     HOMEPAGE_URL "https://github.com/biojppm/rapidyaml"
     LANGUAGES CXX)
 include(../../proj/c4proj/c4Project.cmake)
-c4_project(VERSION 0.15.2
+c4_project(VERSION 0.16.0
     AUTHOR "Joao Paulo Magalhaes <dev@jpmag.me>")
 
 if(RYML_TEST_INSTALL_PACKAGE_MODE)
